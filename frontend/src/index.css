@@ -1,4 +1,4 @@
-body {
+ body {
   margin: 0;
   font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', 'Roboto', 'Oxygen',
     'Ubuntu', 'Cantarell', 'Fira Sans', 'Droid Sans', 'Helvetica Neue',
@@ -11,3 +11,463 @@ code {
   font-family: source-code-pro, Menlo, Monaco, Consolas, 'Courier New',
     monospace;
 }
+
+.featured-colleges{
+  margin: 4rem;
+} 
+
+
+
+
+ .rating span{
+  color: #ffc000;
+}
+
+.college{
+  border: 1px #404040 solid;
+  margin: 1rem;
+} 
+
+ .college img{
+  max-width: 400px;
+}
+
+.college-info{
+  padding: 1rem;
+}
+
+.img-large{
+  max-width: 75%;
+}
+
+.img-thumbnail{
+  height: 80px;
+}
+
+.card-img-top{
+  width: 300px; /* Set the desired width */
+  height: 150px; /* Set the desired height */
+  object-fit: cover; /* Crop the image to cover the specified dimensions */
+ 
+
+}
+
+
+
+
+.college-card {
+  transition: filter 0.3s ease;
+}
+
+.college-card:hover {
+  filter: brightness(90%); /* Adjust the brightness value as needed */
+}
+
+.visit-college-btn{
+  
+} 
+
+.college-name-header{
+  font-size: 2rem;
+}
+
+
+ .footer {
+background-color: #000;
+  padding: 5rem;
+  
+  
+  opacity: 0.9;
+  
+}
+
+/*
+
+.footer-col{
+  display: flex;
+  justify-content: space-around;
+
+}
+
+.footer h1 {
+  font-size: 18px;
+  color: #fff;
+  margin-bottom: 15px;
+}
+
+.footer ul {
+  list-style: none;
+  padding: 0;
+}
+
+.footer ul li {
+  margin-bottom: 10px;
+}
+
+.footer ul li a {
+  color: #fff;
+  text-decoration: none;
+  transition: color 0.3s ease;
+  opacity: 0.5;
+}
+
+.footer ul li a:hover {
+  color: #007bff;
+} */
+
+
+
+
+.footer-col {
+  display: flex;
+  justify-content: center; /* Center content horizontally */
+}
+
+.footer h1 {
+  font-size: 18px;
+  color: #fff;
+  margin-bottom: 15px;
+  margin-top: 8px;
+  text-align: center; /* Center text within each section */
+}
+
+.footer ul {
+  list-style: none;
+  padding: 0;
+  text-align: center; /* Center list items within each section */
+}
+
+.footer ul li {
+  margin-bottom: 10px;
+}
+
+.footer ul li a {
+  color: #fff;
+  text-decoration: none;
+  transition: color 0.3s ease;
+  opacity: 0.5;
+}
+
+.footer ul li a:hover {
+  color: #007bff;
+}
+
+
+
+
+
+
+.right-nav .nav-link{
+  /* border: rgba(255, 255, 255, 0.1) solid 3px;
+  border-radius: 1rem;
+  padding: 0.5rem; */
+  color: rgb(154, 116, 116) !important;
+}
+
+
+
+
+.hometop-logo{
+  width: 50%;
+}
+
+.searchbox-row{
+  /* background-color: #ffc000; */
+  visibility: hidden;
+  display: none;
+}
+
+.main-box{
+  background-color: #c6c3c0;
+  height: 93vh;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+
+.firstHalf{
+  /* background-color: aquamarine; */
+  padding: 2rem;
+  margin-left: 4rem;
+  font-size: 1.3rem;
+}
+
+.text-big{
+  font-size: 2rem ;
+  font-weight: bold;
+}
+
+.text-small{
+  margin-left: 0.2rem;
+}
+
+.buttons{
+  /* background-color: #f08000; */
+  display: flex;
+  /* justify-content: center; */
+  margin-left: 0.2rem;
+}
+
+.buttons Button{
+  margin: 0.2rem;
+}
+
+.secondHalf{
+  /* background-color: rgb(43, 47, 46); */
+  display: flex;
+  padding: 2rem;
+  justify-content: center;
+  align-items: center;
+  margin-right: 4rem;
+}
+
+.main-box-r1{
+  /* background-color: blueviolet; */
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+
+
+
+/* Testimonials Section */
+#testimonials {
+  text-align: center;
+  background-color: #c6c3c0;
+  padding: 2rem;
+}
+
+.carousel-item {
+  width: 100%;
+}
+
+
+.corousel{
+  margin-bottom: 2rem;
+}
+
+
+
+
+
+.corousel-img{
+  width: 60%;
+}
+
+.modal-90w {
+  max-width: 70vw; 
+}
+
+.modal-90h .modal-content {
+  height: 90vh; 
+}
+
+.modal-90h .modal-body {
+  padding: 0; 
+  /* background-color: #000; */
+}
+
+/* Optional: Style the modal header and footer if needed */
+.modal-header,
+.modal-footer {
+  padding: 1rem; 
+  /* background-color: #000; */
+  /* filter: blur(2px);  */
+  
+}
+
+.modal-header-custom .btn-close {
+  color: #fff; 
+}
+
+
+
+/* Media query for small devices */
+
+
+@media only screen and (max-width: 1450px) {
+ 
+  .card-img-top{
+   width: 250px;
+   height: 150px;
+     background-color: #f08000;
+     
+ }
+}
+
+@media only screen and (max-width: 1250px) {
+  .college-name-header{
+   font-size: 1.5rem;
+  }
+ 
+  .card-img-top{
+   width: 200px;
+     height: 150px;
+     
+    }
+}
+  
+@media (max-width: 991.3px) {
+    .search-box{
+      display: none;
+      /* margin-top: 7rem; */
+      /* background-color: #007bff; */
+      /* padding-top: 10px; */
+    }
+    
+    .search-box-mobile{
+      width: 40rem;
+      /* margin-top: 7rem; */
+      /* margin-bottom: 1rem; */
+      /* background-color: #007bff; */
+      /* padding-top: 10px; */
+    }
+
+    .search-box-bar{
+      /* background-color: aqua; */
+      margin-top: 10px;
+    }
+    
+    .searchbox-row{
+      visibility: visible !important;
+      display: block !important;
+      /* background-color: #007bff; */
+      
+    }
+}
+
+@media (max-width: 991px) {
+  .text-big{
+    font-size: 2rem;
+        }
+        
+        
+        .firstHalf, .secondHalf{
+          font-size: 1rem;
+        }
+        
+        .hometop-logo{
+          width: 20%;
+        }
+        
+      .secondHalf{
+        
+        margin-right: 0rem;
+      }
+      
+      
+      
+      
+}
+
+@media (max-width: 768px) {
+        .carousel-item {
+          width: 100%;
+        }
+        
+        .corousel-img{
+          width: 90% !important;
+          }
+}
+        
+        
+        
+@media (max-width: 750px) {
+        .corousel-img{
+          width: 200%;
+        }
+        .text-big{
+          font-size: 1.5rem;
+        }
+        
+        
+        .firstHalf, .secondHalf{
+          font-size: 0.7rem;
+        }
+        
+        .hometop-logo{
+          width: 20%;
+          /* background-color: aqua; */
+        }
+        
+        .firstHalf{
+          /* background-color: aquamarine; */
+          padding: 2rem;
+          margin-left: 0;
+          font-size: 1rem;
+        }
+        
+        
+}
+
+@media (max-width: 650px) {
+  .footer-col{
+    list-style: none;
+            display: flex;
+            
+            padding: 1rem;
+          }
+}
+        
+        
+@media (max-width: 575px) {
+          
+          
+          .search-box-mobile{
+            width: 20rem;
+            margin-top: 1rem;
+            margin-bottom: 1rem;
+          }
+          
+          .box-main{
+            padding-top: 5rem;
+          }
+          
+          .college-header-nav {
+            display: flex;
+            flex-direction: column; /* Change from row to column */
+            align-items: center; /* Center align the nav links */
+            background-color: orange;
+          }
+}
+
+
+@media (max-width: 450px) {
+          .text-big{
+            font-size: 1.2rem;
+          }
+          
+          
+          .firstHalf, .secondHalf{
+            font-size: 0.5rem;
+          }
+          
+          .hometop-logo{
+            width: 27%;
+            /* background-color: aqua; */
+          }
+          
+          .firstHalf{
+            /* background-color: aquamarine; */
+            padding: 1.5rem;
+            margin-left: 0;
+            font-size: 0.8rem;
+          }
+          
+          .custom-btn {
+            font-size: 0.8rem !important; /* Adjust the font size as needed */
+            /* Adjust the padding as needed */
+          }
+          
+          
+          
+}
+        
+        
+@media (max-width: 360x) {
+          
+          
+          .box-main{
+            margin-top: 10rem;
+          }
+} 
