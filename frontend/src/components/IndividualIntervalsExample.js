@@ -3,29 +3,22 @@ import ExampleCarouselImage from './ExampleCarouselImage';
 
 function IndividualIntervalsExample() {
   return (
-    <Carousel className='corousel'>
+    <Carousel className='corousel' >
       <Carousel.Item className='carousel-item' interval={1000}>
-        <ExampleCarouselImage text="First slide" />
-        <Carousel.Caption>
-          <h3>First slide label</h3>
-          <p>Nulla vitae elit libero, a pharetra augue mollis interdum.</p>
-        </Carousel.Caption>
+        <ExampleCarouselImage text="First slide" imgUrl = '/testimonials/t1.jpg' />
+        
       </Carousel.Item>
       <Carousel.Item className='carousel-item' interval={500}>
-        <ExampleCarouselImage text="Second slide" />
-        <Carousel.Caption>
-          <h3>Second slide label</h3>
-          <p>Lorem ipsum dolor sit amet, consectetur adipiscing elit.</p>
-        </Carousel.Caption>
+        <ExampleCarouselImage text="Second slide" imgUrl = '/testimonials/t2.jpg' />
+        
       </Carousel.Item>
       <Carousel.Item className='carousel-item'>
-        <ExampleCarouselImage text="Third slide" />
-        <Carousel.Caption>
-          <h3>Third slide label</h3>
-          <p>
-            Praesent commodo cursus magna, vel scelerisque nisl consectetur.
-          </p>
-        </Carousel.Caption>
+        <ExampleCarouselImage text="Third slide" imgUrl = '/testimonials/t3.jpg' />
+        
+      </Carousel.Item>
+      <Carousel.Item className='carousel-item'>
+        <ExampleCarouselImage text="Third slide" imgUrl = '/testimonials/t4.jpg' />
+        
       </Carousel.Item>
     </Carousel>
   );

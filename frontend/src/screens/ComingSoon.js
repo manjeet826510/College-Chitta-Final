@@ -12,8 +12,7 @@ const ComingSoon = () => {
   return (
     <div className="coming-soon-container">
       <div className="text-container">
-        <h1>Oh no! You've hit a wrong path.</h1>
-        <h2>The page is under construction.</h2>
+        <h1>Coming Soon ...</h1>
       </div>
       <div className="construction-cone"></div>
       <div style={{marginTop: "2rem"}}>

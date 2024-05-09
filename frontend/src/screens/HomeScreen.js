@@ -6,6 +6,7 @@ import RecentlyVisitedCollege from '../components/RecentlyVisitedCollege';
 import SearchBoxMobile from '../components/SearchBoxMobile';
 import Testimonials from '../components/Testimonials';
 
+
 const HomeScreen = () => {
   const [colleges, setColleges] = useState([]);
   const [error, seterror] = useState(null);
@@ -13,7 +14,7 @@ const HomeScreen = () => {
   useEffect(() => {
     const fetchColleges = async () => {
       try {
-        const response = await axios.get('/api/colleges');
+        const response = await axios.get(`/api/colleges`);
         setColleges(response.data);
       } catch (error) {
         console.error('Error fetching colleges:', error.message);

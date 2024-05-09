@@ -4,8 +4,7 @@ import Nav from 'react-bootstrap/Nav';
 import Navbar from 'react-bootstrap/Navbar';
 import Information from './collegeHeader/Information';
 import CoursesFees from './collegeHeader/CoursesFees';
-import JEEMainsCutoff from './collegeHeader/JEEMainsCutoff';
-import WBJEECutoff from './collegeHeader/WBJEECutoff';
+import Cutoff from './collegeHeader/Cutoff';
 
 function CollegeHeader({ college }) {
     const [navLink, setNavLink] = useState("info");
@@ -24,19 +23,16 @@ function CollegeHeader({ college }) {
                     <Nav className="me-auto justify-content-center flex-column flex-sm-row" style={{ margin: '0 auto' }}>
                         <Nav.Link onClick={() => setNavLink("info")} style={{ margin: '0 10px', color: navLink === "info" ? "red" : "inherit" }}>Information</Nav.Link>
                         <Nav.Link onClick={() => setNavLink("cf")} style={{ margin: '0 10px', color: navLink === "cf" ? "red" : "inherit" }}>Courses & Fees</Nav.Link>
-                        {
-                            college.cutoff.map((nav) => (
-                                <Nav.Link key={nav.tag} onClick={() => setNavLink(nav.tag)} style={{ margin: '0 10px', color: navLink === `${nav.tag}` ? "red" : "inherit" }}>{nav.cutoffName} cutoff</Nav.Link>
-                            ))
-                        }
+                        {college.cutoff.map((nav, index) => (
+                            <Nav.Link key={index} onClick={() => setNavLink(index.toString())} style={{ margin: '0 10px', color: navLink === index.toString() ? "red" : "inherit" }}>{nav.cutoffName} Cutoff</Nav.Link>
+                        ))}
                     </Nav>
                 </Container>
             </Navbar>
 
             {navLink === "info" ? <Information college={college} /> :
                 navLink === "cf" ? <CoursesFees college={college} /> :
-                    navLink === "mains" ? <JEEMainsCutoff college={college} /> :
-                        <WBJEECutoff college={college} />}
+                    <Cutoff college={college} index={parseInt(navLink)} />}
         </>
     );
 }

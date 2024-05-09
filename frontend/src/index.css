@@ -251,7 +251,8 @@ background-color: #000;
 
 
 .corousel-img{
-  width: 60%;
+  width: 70%;
+  /* height: 70vh; */
 }
 
 .modal-90w {
@@ -279,6 +280,23 @@ background-color: #000;
 .modal-header-custom .btn-close {
   color: #fff; 
 }
+
+.profile-pic{
+  width: 30px; /* Adjust the size as needed */
+  height: 30px; /* Adjust the size as needed */
+  border-radius: 50%; /* Make it round */
+}
+
+.small-container{
+  max-width: 600px;
+  max-height: 1000px;
+}
+
+
+
+
+
+
 
 
 
@@ -334,6 +352,19 @@ background-color: #000;
       /* background-color: #007bff; */
       
     }
+}
+
+@media (min-width: 991.3px) {
+  .search-box-bar{
+    width: 35rem;
+  }
+
+  .corousel-img{
+    width: 70%;
+    height: 80vh;
+  }
+  
+  
 }
 
 @media (max-width: 991px) {

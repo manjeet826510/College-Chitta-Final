@@ -5,6 +5,10 @@ import path from "path";
 import cors from "cors";
 import contactRouter from "./routes/contactRoutes.js";
 import College from "./models/collegeModel.js";
+import userRouter from "./routes/userRoutes.js";
+import uploadRouter from "./routes/uploadRouter.js";
+import collegeRouter from "./routes/collegeRoutes.js";
+import articleRouter from "./routes/articleRoutes.js";
 
 
 dotenv.config();
@@ -25,16 +29,12 @@ app.use(express.json());
 
 app.use(express.urlencoded({ extended: true }));
 
-
+app.use(`/api/colleges`, collegeRouter);
+app.use(`/api/blogs`, articleRouter);
 app.use(`/api/contact`, contactRouter);
-app.get('/api/colleges', async (req, res) => {
-  try {
-    const colleges = await College.find();
-    res.json(colleges);
-  } catch (err) {
-    res.status(500).json({ message: err.message });
-  }
-});
+app.use(`/api/users`, userRouter);
+app.use(`/api/upload`, uploadRouter);
+
 
 
 const __dirname = path.resolve();

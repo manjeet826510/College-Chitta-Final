@@ -17,15 +17,16 @@ const SearchBox = () => {
         e.target.reset();
     }
   return (
-    <Container fluid className='search-box-bar'>
+    <Container fluid className='search-box-bar' style={{backgroundColor: '',width: ''}}>
         <Form
         onSubmit={submitHandler}
+        
         >
             <InputGroup >
                 <FormControl 
                 type='text'
                 onChange={(e)=>setQuery(e.target.value)}
-                placeholder="search products, brands and more..."
+                placeholder="search for colleges..."
                 ></FormControl>
                 <Button
                 type='submit'

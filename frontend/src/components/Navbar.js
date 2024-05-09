@@ -1,14 +1,29 @@
-import React from 'react'
+import React, { useContext } from 'react'
 import Navbar from "react-bootstrap/Navbar";
 import Nav from "react-bootstrap/Nav";
 import Container from "react-bootstrap/Container";
 import { LinkContainer } from "react-router-bootstrap";
 import { Link } from 'react-router-dom';
 import SearchBox from './SearchBox';
+import NavDropdown from "react-bootstrap/NavDropdown";
+import { Store } from '../Store';
 
 
 
 const NavbarComp = () => {
+  const { state, dispatch: ctxDispatch } = useContext(Store);
+  const {  userInfo } = state;
+
+ 
+
+  const signoutHandler = () => {
+    ctxDispatch({ type: "USER_SIGNOUT" });
+    // console.log(state);
+    localStorage.removeItem("userInfo");
+    // navigate('/signin');
+    window.location.href = "/signin";
+  };
+
   return (
     <Navbar className='nav-bar' sticky="top"  bg="dark" variant="dark" expand="lg">
 
@@ -64,6 +79,44 @@ const NavbarComp = () => {
                   <Link to="/counselling" className="nav-link">
                     Counselling
                   </Link>
+
+                  
+                  {userInfo ? (
+                    <NavDropdown  title={<img src={userInfo.image } className='profile-pic'alt="Profile" />}  id="basic-nav-dropdown">
+                      <LinkContainer to="/profile">
+                        <NavDropdown.Item>User Profile</NavDropdown.Item>
+                      </LinkContainer>
+  
+                      <Link
+                        className="dropdown-item"
+                        to="#signout"
+                        onClick={signoutHandler}
+                      >
+                        Sign Out
+                      </Link>
+                    </NavDropdown>
+                  ) 
+                  : 
+                  (
+                    <Link className="nav-link" to="/signin">
+                      Sign In
+                    </Link>
+                  )}
+
+
+                  {/*admin starts here */}
+
+                  {userInfo && userInfo.isAdmin && (
+                    
+                      <Link to="/admin/dashboard" className="nav-link">
+                        Dashboard
+                      </Link>
+                      
+                   
+                  )}
+
+                  {/* admin ends here*/}
+                 
                   
                   
                 </Nav>

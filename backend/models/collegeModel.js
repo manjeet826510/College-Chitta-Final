@@ -15,7 +15,8 @@ const collegeSchema = mongoose.Schema({
   info: [String],
   coursesAndFees: [{ Course: String, Fees: String, Eligibility: String }],
   cutoff: [{ cutoffName: String, tag: String, stat: [{ course: String, cutoff2023: String }] }]
-});
+}
+);
 
 const College = mongoose.model('College', collegeSchema);
 
