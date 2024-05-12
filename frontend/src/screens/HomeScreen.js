@@ -1,10 +1,11 @@
 import React, { useState, useEffect } from 'react';
-import axios from 'axios';
+// import axios from 'axios';
 import HomeTop from '../components/HomeTop';
 import FeaturedCollege from '../components/FeaturedCollege';
 import RecentlyVisitedCollege from '../components/RecentlyVisitedCollege';
 import SearchBoxMobile from '../components/SearchBoxMobile';
 import Testimonials from '../components/Testimonials';
+import axios from '../api';
 
 
 const HomeScreen = () => {
@@ -14,7 +15,7 @@ const HomeScreen = () => {
   useEffect(() => {
     const fetchColleges = async () => {
       try {
-        const response = await axios.get(`/api/colleges`);
+        const response = await axios.get('api/colleges');
         setColleges(response.data);
       } catch (error) {
         console.error('Error fetching colleges:', error.message);

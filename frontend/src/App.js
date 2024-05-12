@@ -28,6 +28,8 @@ import DashboardScreen from './screens/DashboardScreen';
 import CollegeUpload from './screens/CollegeUpload';
 import CollegeUploadTest from './screens/CollegeUploadTest';
 import BlogUpload from './screens/BlogUpload';
+import Contact from './screens/Contact';
+import ArticleComments from './screens/ArticleComments';
 
 
 
@@ -47,7 +49,7 @@ const App = () => {
             <Route path='/signin' element={<SigninScreen/>}/>
             <Route path="/signup" element={<SignupScreen />} />
             <Route path='/about' element={<ComingSoon/>}/>
-            <Route path='/contact' element={<ComingSoon/>}/>
+            <Route path='/contact' element={<Contact/>}/>
             <Route path='/service' element={<ComingSoon/>}/>
             <Route path='/admission' element={<AdmissionScreen/>}/>
             <Route path='/counselling' element={<CounsellingScreen/>}/>
@@ -60,7 +62,7 @@ const App = () => {
             <Route path='services' element={<ComingSoon/>}/>
             <Route path="/search" element={<SearchScreen />} />
             <Route path="/profile" element={<ComingSoon />} />
-            <Route path="/test" element={<CollegeUploadTest />} />
+            <Route path="/test" element={<ArticleComments articleId="learn-react" />} />
 
 
             <Route

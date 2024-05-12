@@ -9,6 +9,45 @@ dotenv.config();
 
 const contactRouter = express.Router();
 
+contactRouter.post("/",
+  expressAsyncHandler(async (req, res) => {
+
+    const { name, email, msg } = req.body;
+  // console.log(name);
+  // console.log(phone);
+  // console.log(email);
+  console.log(msg);
+
+  // Create a transporter using your email service (e.g., Gmail)
+  const transporter = createTransport({
+      service: 'gmail',
+      auth: {
+          user: process.env.USER, // your email
+          pass: process.env.PASS  // your email password or an app-specific password
+      }
+  });
+
+  // Set up email data
+  const mailOptions = {
+      from: email,
+      to: "manjeetkumar.cse2020@nsec.ac.in", // recipient's email
+      subject: `New text from ${name} - ${email}`,
+      text: msg
+  };
+
+  // Send email
+  transporter.sendMail(mailOptions, (error, info) => {
+      if (error) {
+          console.error('Error sending email:', error);
+          res.status(500).send('Error sending email');
+      } else {
+          console.log('Email sent:', info.response);
+          res.status(200).send('Email sent successfully');
+      }
+  });
+  })
+);
+
 
 contactRouter.post("/send-email",
   expressAsyncHandler(async (req, res) => {

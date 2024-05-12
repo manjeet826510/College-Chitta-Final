@@ -5,6 +5,7 @@ import { Link } from 'react-router-dom';
 
 const Footer = () => {
   return (
+    <>
     <div className='footer'>
       <Row className='footer-row'>
         <Col className='footer-col' md={3} xs={12}>
@@ -36,7 +37,7 @@ const Footer = () => {
             <li><Link to='https://www.instagram.com/hustlewithmaharufh/' target='_blank'>Instagram</Link></li>
             <li><Link to='https://www.facebook.com/maharufh.alimir' target='_blank'>Facebook</Link></li>
             <li><Link to='https://www.twitter.com/home' target='_blank'>Twitter</Link></li>
-            <li><Link to='https://www.youtube.com/@MentorRaju' target='_blank'>YouTube</Link></li>
+            <li><Link to='https://t.me/MentorRaju' target='_blank'>Telegram</Link></li>
           </ul>
           </div>
         </Col>
@@ -53,6 +54,9 @@ const Footer = () => {
         </Col>
       </Row>
     </div>
+    <div className="text-center" style={{backgroundColor: '#000', opacity: '0.9', paddingBottom: '1rem', color: '#a0a3a2'}}>© 2024 College Chitta. All rights reserved.
+</div>
+    </>
   )
 }
 
