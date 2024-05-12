@@ -16,7 +16,7 @@ contactRouter.post("/",
   // console.log(name);
   // console.log(phone);
   // console.log(email);
-  console.log(msg);
+  // console.log(text);
 
   // Create a transporter using your email service (e.g., Gmail)
   const transporter = createTransport({
