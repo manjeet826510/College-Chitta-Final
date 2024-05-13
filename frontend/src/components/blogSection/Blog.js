@@ -20,9 +20,9 @@ function Blog() {
             <Navbar bg="light" data-bs-theme="light" style={{ border: "solid black 1px" }}>
                 <Container>
                     <Nav className="me-auto justify-content-center flex-column flex-sm-row" style={{ margin: '0 auto' }}>
-                        <Nav.Link onClick={() => setNavLink("home")} style={{ margin: '0 10px', color: navLink === "info" ? "red" : "inherit" }}>Home</Nav.Link>
-                        <Nav.Link onClick={() => setNavLink("about")} style={{ margin: '0 10px', color: navLink === "cf" ? "red" : "inherit" }}>About</Nav.Link>
-                        <Nav.Link onClick={() => setNavLink("articles")} style={{ margin: '0 10px', color: navLink === "cf" ? "red" : "inherit" }}>Articles</Nav.Link>
+                        <Nav.Link onClick={() => setNavLink("home")} style={{ margin: '0 10px', color: navLink === "home" ? "red" : "inherit" }}>Home</Nav.Link>
+                        <Nav.Link onClick={() => setNavLink("about")} style={{ margin: '0 10px', color: navLink === "about" ? "red" : "inherit" }}>About</Nav.Link>
+                        <Nav.Link onClick={() => setNavLink("articles")} style={{ margin: '0 10px', color: navLink === "articles" ? "red" : "inherit" }}>Articles</Nav.Link>
                        
                     </Nav>
                 </Container>

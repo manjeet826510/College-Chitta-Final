@@ -4,6 +4,10 @@ import Col from "react-bootstrap/Col";
 import { Link } from 'react-router-dom';
 
 const Footer = () => {
+
+  
+
+
   return (
     <>
     <div className='footer'>
@@ -45,10 +49,11 @@ const Footer = () => {
           <div>
           <h1>About Us</h1>
           <ul>
-            <li><Link to='/founder' >Founder</Link></li>
-            <li><Link to='/testimonials' >Testimonials</Link></li>
-            <li><Link to='/history' >History</Link></li>
-            <li><Link to='/futureplans' >Future Plans</Link></li>
+            <li><a href='/about/#college-chitta' >college-chitta.com</a></li>
+            <li><a href='/about/#founders' >Founder</a></li>
+            <li><a href='/about/#college-reviews' >College Reviews</a></li>
+            <li><a href='/about/#videos-social-media' >Videos</a></li>
+            
           </ul>
           </div>
         </Col>

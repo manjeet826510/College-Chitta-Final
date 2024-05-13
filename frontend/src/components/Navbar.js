@@ -61,8 +61,8 @@ const NavbarComp = () => {
                   <Link to="/contact" className="nav-link">
                     Contact
                   </Link>
-                  <Link to="/service" className="nav-link">
-                    Service
+                  <Link to="/services" className="nav-link">
+                    Services
                   </Link>
                   
                   

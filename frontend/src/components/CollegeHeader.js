@@ -5,6 +5,8 @@ import Navbar from 'react-bootstrap/Navbar';
 import Information from './collegeHeader/Information';
 import CoursesFees from './collegeHeader/CoursesFees';
 import Cutoff from './collegeHeader/Cutoff';
+import ReviewUpload from '../screens/ReviewUpload';
+import ReviewSection from './blogSection/ReviewSection';
 
 function CollegeHeader({ college }) {
     const [navLink, setNavLink] = useState("info");
@@ -26,12 +28,15 @@ function CollegeHeader({ college }) {
                         {college.cutoff.map((nav, index) => (
                             <Nav.Link key={index} onClick={() => setNavLink(index.toString())} style={{ margin: '0 10px', color: navLink === index.toString() ? "red" : "inherit" }}>{nav.cutoffName} Cutoff</Nav.Link>
                         ))}
+                        <Nav.Link onClick={() => setNavLink("reviews")} style={{ margin: '0 10px', color: navLink === "reviews" ? "red" : "inherit" }}>Reviews</Nav.Link>
+
                     </Nav>
                 </Container>
             </Navbar>
 
             {navLink === "info" ? <Information college={college} /> :
                 navLink === "cf" ? <CoursesFees college={college} /> :
+                navLink === "reviews" ? <ReviewSection college={college} /> :
                     <Cutoff college={college} index={parseInt(navLink)} />}
         </>
     );

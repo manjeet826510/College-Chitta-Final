@@ -10,6 +10,7 @@ import uploadRouter from "./routes/uploadRouter.js";
 import collegeRouter from "./routes/collegeRoutes.js";
 import articleRouter from "./routes/articleRoutes.js";
 import commentRouter from "./routes/commentRoutes.js";
+import reviewRouter from "./routes/reviewRoutes.js";
 
 
 dotenv.config();
@@ -33,6 +34,7 @@ app.use(express.urlencoded({ extended: true }));
 app.use(`/api/colleges`, collegeRouter);
 app.use(`/api/blogs`, articleRouter);
 app.use(`/api/comments`, commentRouter);
+app.use(`/api/reviews`, reviewRouter);
 app.use(`/api/contact`, contactRouter);
 app.use(`/api/users`, userRouter);
 app.use(`/api/upload`, uploadRouter);

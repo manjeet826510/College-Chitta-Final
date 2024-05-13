@@ -33,21 +33,27 @@ const ProfileScreen = () => {
   const [password, setPassword] = useState("");
   const [confirmPassword, setConfirmPassword] = useState("");
   const [image, setImage] = useState(userInfo ? userInfo.image : null);
+  const [newimage, setnewImage] = useState(null);
   const [location, setLocation] = useState("");
 
-  const submitHandler = async (e) => {
-    e.preventDefault();
-    dispatch({ type: "UPDATE_REQUEST" });
-    if (image) {
-      const formDataImage = new FormData();
-      formDataImage.append("image", image);
-
-      const {
-        data: { imageUrl },
-      } = await axios.post("/api/upload", formDataImage);
-      console.log(`imageUrl: ${imageUrl}`);
-      setLocation(imageUrl);
+  const imageUpload = async () => {
+    try {
+      if (newimage) {
+        const formDataImage = new FormData();
+        formDataImage.append("image", newimage);
+  
+        const { data: { imageUrl } } = await axios.post("/api/upload", formDataImage);
+        console.log(`imageUrl: ${imageUrl}`);
+        setLocation(imageUrl);
+        return imageUrl;
+      }
+    } catch (error) {
+      console.error("Error occurred during image upload:", error);
+      throw error; // Rethrow the error to be caught in the outer try-catch block
     }
+  };
+
+  const saveUserToDB = async (imageUrlFromUpload) => {
     try {
       const { data } = await axios.put(
         "/api/users/profile",
@@ -55,7 +61,7 @@ const ProfileScreen = () => {
           name,
           email,
           password,
-          image: location,
+          image: imageUrlFromUpload,
         },
         {
           headers: {
@@ -68,7 +74,27 @@ const ProfileScreen = () => {
       dispatch({ type: "UPDATE_SUCCESS" });
       ctxDispatch({ type: "USER_SIGNIN", payload: data });
       localStorage.setItem("userInfo", JSON.stringify(data));
+      window.scroll(0,0);
       toast.success("User updated successfully");
+    } catch (error) {
+      console.error("Error occurred while saving user data to the database:", error);
+      throw error; // Rethrow the error to be caught in the outer try-catch block
+    }
+  };
+
+  const submitHandler = async (e) => {
+    e.preventDefault();
+    
+   
+    try {
+      dispatch({ type: "UPDATE_REQUEST" });
+      let imageUrlFromUpload = "";
+      if(newimage){
+
+        imageUrlFromUpload  = await imageUpload();
+        console.log(`image url after await is ${imageUrlFromUpload}`);
+      }
+      await saveUserToDB(imageUrlFromUpload)
     } catch (err) {
       dispatch({ type: "UPDATE_FAIL" });
       toast.error(getError(err));
@@ -99,7 +125,7 @@ const ProfileScreen = () => {
           />
         </Form.Group>
         <Form.Group className="mb-3" controlId="password">
-          <Form.Label>Password</Form.Label>
+          <Form.Label>Password (Old or New Password)</Form.Label>
           <Form.Control
             type="password"
             value={password}
@@ -110,17 +136,24 @@ const ProfileScreen = () => {
         <Form.Group className="mb-3" controlId="confirmPassword">
           <Form.Label>Confirm Password</Form.Label>
           <Form.Control
-            type="confirmPassword"
+            type="password"
             value={confirmPassword}
             required
             onChange={(e) => setConfirmPassword(e.target.value)}
           />
         </Form.Group>
         <Form.Group className="mb-3" controlId="imageUpload">
+          <Form.Label>Previous Profile Image</Form.Label>
+          <div>
+            <img src={userInfo.image} />
+          </div>
+        </Form.Group>
+        <Form.Group className="mb-3" controlId="imageUpload">
           <Form.Label>Upload Profile Photo (if you want to change)</Form.Label>
           <Form.Control
             type="file"
-            onChange={(e) => setImage(e.target.files[0])}
+            accept="image/jpeg, image/jpg"
+            onChange={(e) => setnewImage(e.target.files[0])}
           />
         </Form.Group>
         <div className="mb-3">

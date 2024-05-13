@@ -85,7 +85,7 @@ collegeRouter.put("/:id",
         college.shortName = req.body.sname; 
         college.slug = req.body.slug; 
         college.rating = req.body.rating; 
-        college.location = req.body.rating; 
+        college.location = req.body.location; 
         college.city = req.body.city; 
         college.videoReviewLink = req.body.reviewLink;
         college.highlights = req.body.highlights;

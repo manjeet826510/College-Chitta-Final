@@ -353,6 +353,47 @@ background-color: #000;
 /* Comment Card css ends here */
 
 
+/* Service css starts here */
+
+/* Add this CSS to your main CSS file or a separate file */
+
+/* Center the service cards vertically */
+.ServiceCard .card {
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  padding: 5rem;
+  background-color: #007bff;
+}
+
+/* Style the service icons */
+.ServiceCard .card svg {
+  font-size: 3rem;
+  color: #007bff; /* Use your preferred color */
+}
+
+/* Add some padding around the service cards */
+.ServiceCard .card-body {
+  padding: 2rem;
+}
+
+/* Style the service titles */
+.ServiceCard .card-title {
+  font-size: 1.5rem;
+  font-weight: bold;
+}
+
+/* Style the service descriptions */
+.ServiceCard .card-text {
+  font-size: 1rem;
+  color: #6c757d; /* Use a slightly darker color for the description */
+}
+
+
+
+/* Service css ends here */
+
+
 
 
 

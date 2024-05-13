@@ -34,6 +34,8 @@ import CollegeListScreen from './screens/CollegeListScreen';
 import CollegeEdit from './screens/CollegeEdit';
 import BlogListScreen from './screens/BlogListScreen';
 import BlogEdit from './screens/BlogEdit';
+import ProtectedRoute from './components/ProtectedRoute';
+import ReviewUpload from './screens/ReviewUpload';
 
 
 
@@ -52,9 +54,9 @@ const App = () => {
             <Route path='/article/:name' element={<Article/>}/>
             <Route path='/signin' element={<SigninScreen/>}/>
             <Route path="/signup" element={<SignupScreen />} />
-            <Route path='/about' element={<ComingSoon/>}/>
+            <Route path='/about' element={<AboutScreen/>}/>
             <Route path='/contact' element={<Contact/>}/>
-            <Route path='/service' element={<ComingSoon/>}/>
+            <Route path='/services' element={<ServiceScreen/>}/>
             <Route path='/admission' element={<AdmissionScreen/>}/>
             <Route path='/counselling' element={<CounsellingScreen/>}/>
             <Route path='college/:slug' element={<CollegeScreen/>}/>
@@ -65,8 +67,28 @@ const App = () => {
             <Route path='futureplans' element={<ComingSoon/>}/>
             <Route path='services' element={<ComingSoon/>}/>
             <Route path="/search" element={<SearchScreen />} />
-            <Route path="/profile" element={<ComingSoon />} />
             <Route path="/test" element={<ComingSoon/>} />
+
+            {/* protected routes starts here */}
+            <Route
+                path="/profile"
+                element={
+                  <ProtectedRoute>
+                    {" "}
+                    <ProfileScreen />{" "}
+                  </ProtectedRoute>
+                }
+              />
+            <Route
+                path="/college/:slug/write-review"
+                element={
+                  <ProtectedRoute>
+                    {" "}
+                    <ReviewUpload />{" "}
+                  </ProtectedRoute>
+                }
+              />
+            {/* protected routes ends here */}
 
 
             <Route

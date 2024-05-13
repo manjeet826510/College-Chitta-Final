@@ -147,9 +147,9 @@ const SignupScreen = () => {
           Already have an account?{" "}
           <Link to={`/signin?redirect=${redirect}`}>Sign in</Link>
         </div>
-        <div style={{color: 'red'}}>
+        {/* <div style={{color: 'red'}}>
           ⚠️Do not use fake or temp email otherwise you will not be able to reset your password later.
-        </div>
+        </div> */}
       </Form>
 
       
