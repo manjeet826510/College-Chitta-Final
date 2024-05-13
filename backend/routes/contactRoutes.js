@@ -9,14 +9,12 @@ dotenv.config();
 
 const contactRouter = express.Router();
 
-contactRouter.post("/",
-  expressAsyncHandler(async (req, res) => {
-
-    const { name, email, msg } = req.body;
+contactRouter.post('/', (req, res) => {
+  // console.log(req.body);
+  const { name, email, msg } = req.body;
   // console.log(name);
-  // console.log(phone);
   // console.log(email);
-  // console.log(text);
+  // console.log(message);
 
   // Create a transporter using your email service (e.g., Gmail)
   const transporter = createTransport({
@@ -30,49 +28,10 @@ contactRouter.post("/",
   // Set up email data
   const mailOptions = {
       from: email,
-      to: "manjeetkumar.cse2020@nsec.ac.in", // recipient's email
-      subject: `New text from ${name} - ${email}`,
-      text: msg
-  };
-
-  // Send email
-  transporter.sendMail(mailOptions, (error, info) => {
-      if (error) {
-          console.error('Error sending email:', error);
-          res.status(500).send('Error sending email');
-      } else {
-          console.log('Email sent:', info.response);
-          res.status(200).send('Email sent successfully');
-      }
-  });
-  })
-);
-
-
-contactRouter.post("/send-email",
-  expressAsyncHandler(async (req, res) => {
-
-    const { name, phone, email, text } = req.body;
-  // console.log(name);
-  // console.log(phone);
-  // console.log(email);
-  // console.log(text);
-
-  // Create a transporter using your email service (e.g., Gmail)
-  const transporter = createTransport({
-      service: 'gmail',
-      auth: {
-          user: process.env.USER, // your email
-          pass: process.env.PASS  // your email password or an app-specific password
-      }
-  });
-
-  // Set up email data
-  const mailOptions = {
-      from: email,
+      cc: email,
       to: process.env.TO, // recipient's email
-      subject: `New text from ${name} - ${email}`,
-      text: text
+      subject: `Thank you, ${name} for messaging College Chitta`,
+      text: msg,
   };
 
   // Send email
@@ -85,8 +44,8 @@ contactRouter.post("/send-email",
           res.status(200).send('Email sent successfully');
       }
   });
-  })
-);
+});
+
 
 contactRouter.post("/save-details",
   expressAsyncHandler(async (req, res) => {

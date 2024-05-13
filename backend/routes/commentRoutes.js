@@ -15,7 +15,7 @@ commentRouter.get("/:name",
       // Find the article by name
       const filteredComments = await Comment.find({ articleName: name }).sort({ createdAt: -1 });
 
-      if (filteredComments) {
+      if (filteredComments.length > 0) {
         // console.log(filteredComments);
         res.send(filteredComments);
       } else {
@@ -28,6 +28,7 @@ commentRouter.get("/:name",
     }
   })
 );
+
 
 
 

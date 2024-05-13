@@ -18,8 +18,7 @@ collegeRouter.get("/", async (req, res) => {
 
 });
 
-collegeRouter.post(
-  "/",
+collegeRouter.post("/",
   isAuth,
   isAdmin,
   expressAsyncHandler(async (req, res) => {
@@ -49,6 +48,91 @@ collegeRouter.post(
     const college = await newCollege.save();
 
     res.send(college);
+  })
+);
+
+collegeRouter.get("/admin", isAuth, isAdmin, async (req, res) => {
+   
+  
+    const colleges = await College.find()
+     
+   
+    res.send({ colleges });
+  });
+
+collegeRouter.get("/:id",
+  expressAsyncHandler(async (req, res) => {
+    // console.log(req.params);
+    const college = await College.findOne({ _id: req.params.id });
+    if (college) {
+      res.send(college);
+    } else {
+      res.status(404).send({ message: "College Not Found" });
+    }
+  })
+);
+
+collegeRouter.put("/:id",
+  isAuth,
+  isAdmin,
+  expressAsyncHandler(async (req, res) => {
+    // console.log(req.body);
+    // console.log(req.params.id);
+    const college = await College.findById(req.params.id);
+    // console.log(product);
+    if (college) {
+        college.name = req.body.name; 
+        college.shortName = req.body.sname; 
+        college.slug = req.body.slug; 
+        college.rating = req.body.rating; 
+        college.location = req.body.rating; 
+        college.city = req.body.city; 
+        college.videoReviewLink = req.body.reviewLink;
+        college.highlights = req.body.highlights;
+        college.logo = req.body.logoUrl;
+        college.image = req.body.imageUrl;
+        college.info = req.body.info;
+        college.coursesAndFees = req.body.coursesAndFees;
+        college.cutoff = req.body.cutoff;
+
+      const updatedCollege = await college.save();
+    //   console.log(updatedCollege);
+      res.send({
+        _id: updatedCollege._id,
+        name: updatedCollege.name, 
+        shortName: updatedCollege.sname, 
+        slug: updatedCollege.slug, 
+        rating: updatedCollege.rating, 
+        location: updatedCollege.rating, 
+        city: updatedCollege.city, 
+        videoReviewLink: updatedCollege.reviewLink,
+        highlights: updatedCollege.highlights,
+        logo: updatedCollege.logoUrl,
+        image: updatedCollege.imageUrl,
+        info: updatedCollege.info,
+        coursesAndFees: updatedCollege.coursesAndFees,
+        cutoff: updatedCollege.cutoff,
+      });
+    } else {
+      res.status(404).send({ message: "College not found" });
+    }
+  })
+);
+
+collegeRouter.delete("/:id",
+  isAuth,
+  isAdmin,
+  expressAsyncHandler(async (req, res) => {
+    // console.log(req.body);
+    // console.log(req.params.id);
+    const result = await College.deleteOne({ _id: req.params.id });
+    if (result.deletedCount > 0) {
+    //   console.log("College deleted successfully");
+      res.send(result);
+      // Additional logic after successful deletion
+    } else {
+      res.status(404).send({ message: "College not found" });
+    }
   })
 );
 

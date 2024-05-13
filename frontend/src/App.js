@@ -30,6 +30,10 @@ import CollegeUploadTest from './screens/CollegeUploadTest';
 import BlogUpload from './screens/BlogUpload';
 import Contact from './screens/Contact';
 import ArticleComments from './screens/ArticleComments';
+import CollegeListScreen from './screens/CollegeListScreen';
+import CollegeEdit from './screens/CollegeEdit';
+import BlogListScreen from './screens/BlogListScreen';
+import BlogEdit from './screens/BlogEdit';
 
 
 
@@ -62,7 +66,7 @@ const App = () => {
             <Route path='services' element={<ComingSoon/>}/>
             <Route path="/search" element={<SearchScreen />} />
             <Route path="/profile" element={<ComingSoon />} />
-            <Route path="/test" element={<ArticleComments articleId="learn-react" />} />
+            <Route path="/test" element={<ComingSoon/>} />
 
 
             <Route
@@ -92,6 +96,45 @@ const App = () => {
                   </AdminRoute>
                 }
               />
+            <Route
+                path="/admin/dashboard/college-update"
+                element={
+                  <AdminRoute>
+                    {" "}
+                    <CollegeListScreen />{" "}
+                  </AdminRoute>
+                }
+              />
+            <Route
+                path="/admin/dashboard/college-edit/:id"
+                element={
+                  <AdminRoute>
+                    {" "}
+                    <CollegeEdit />{" "}
+                  </AdminRoute>
+                }
+              />
+
+            <Route
+                path="/admin/dashboard/blog-update"
+                element={
+                  <AdminRoute>
+                    {" "}
+                    <BlogListScreen />{" "}
+                  </AdminRoute>
+                }
+              />
+
+            <Route
+                path="/admin/dashboard/blog-edit/:name"
+                element={
+                  <AdminRoute>
+                    {" "}
+                    <BlogEdit />{" "}
+                  </AdminRoute>
+                }
+              />
+            
           </Routes>
         </main>
        

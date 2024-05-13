@@ -4,10 +4,13 @@ import { Store } from "../Store";
 import axios from "axios";
 import { toast } from "react-toastify";
 import getError from "../utils";
+import { useNavigate } from "react-router-dom";
 
 const BlogUpload = () => {
     const { state } = useContext(Store);
   const { userInfo } = state;
+
+  const navigate = useNavigate()
 
   const [image, setImage] = useState(null);
 
@@ -57,6 +60,7 @@ const BlogUpload = () => {
           },
         }
       );
+      navigate('/admin/dashboard/blog-update');
       toast.success("Blog uploaded successfully");
       console.log(data);
       // navigate(`/admin/product/${data.product._id}`)

@@ -1,16 +1,19 @@
-import React, { useContext, useState } from "react";
+import React, { useContext, useEffect, useState } from "react";
 import { Button, Container, Form } from "react-bootstrap";
 import { Store } from "../Store";
 import axios from "axios";
 import { toast } from "react-toastify";
 import getError from "../utils";
-import { useNavigate } from "react-router-dom";
+import { useNavigate, useParams } from "react-router-dom";
 
-const CollegeUpload = () => {
+const CollegeEdit = () => {
     const { state } = useContext(Store);
   const { userInfo } = state;
 
-  const navigate = useNavigate()
+  const navigate = useNavigate();
+
+  const { id } = useParams();
+  // console.log(id);
 
   const [formData, setFormData] = useState({
     // Other fields...
@@ -30,6 +33,46 @@ const CollegeUpload = () => {
 
   });
 
+  useEffect(() => {
+    const fetchCollege = async () => {
+      try {
+        const { data } = await axios.get(`/api/colleges/${id}`);
+        // console.log(data);
+        setFormData({
+          ...formData,
+          name: data.name, 
+          sname: data.shortName, 
+          slug: data.slug, 
+          rating: data.rating, 
+          location: data.location, 
+          city: data.city, 
+          reviewLink: data.videoReviewLink,
+          highlights: data.highlights, // Assuming data.highlights is an array of objects
+          logoUrl: data.logo,
+          imageUrl: data.image,
+          info: data.info, // Assuming data.info is an array of strings
+          coursesAndFees: data.coursesAndFees, // Assuming data.coursesAndFees is an array of objects
+          cutoff: data.cutoff // Assuming data.cutoff is an array of objects
+        });
+      } catch (error) {
+        // Handle error
+        toast.error('college not found')
+        navigate('/admin/dashboard/college-update');
+        // console.error('Error fetching college data:', error);
+      }
+    };
+  
+    fetchCollege();
+  }, [id]); // Add formData as a dependency if it's needed for further processing
+
+  const deleteWarning = ()=>{
+    const confirmed = window.confirm('Do you really want to remove?');
+    return confirmed;
+  }
+  
+
+ 
+
 
 
   // Function to handle form submission
@@ -38,8 +81,8 @@ const CollegeUpload = () => {
 
     try {
       
-      const { data } = await axios.post(
-        "/api/colleges",
+      const { data } = await axios.put(
+        `/api/colleges/${id}`,
         {
             name: formData.name, 
             sname: formData.sname, 
@@ -64,8 +107,8 @@ const CollegeUpload = () => {
         }
       );
       navigate('/admin/dashboard/college-update');
-      toast.success("College uploaded successfully");
-      console.log(data);
+      toast.success("College updated successfully");
+      // console.log(data);
       // navigate(`/admin/product/${data.product._id}`)
       // console.log("product created");
     } catch (err) {
@@ -90,6 +133,8 @@ const CollegeUpload = () => {
         cutoff: [{ cutoffName: "", tag: "", stat: [{ course: "", cutoff2023: "" }]}]
     });
   };
+
+ 
 
 
 
@@ -400,7 +445,7 @@ const removeInfoField = (index) => {
             />
             {
                 formData.highlights.length > 1 && (
-                    <Button size="sm" variant="danger" onClick={() => removeHighlight(index)}>
+                    <Button size="sm" variant="danger" onClick={() => { if(deleteWarning()) removeHighlight(index);} }>
                        x
                     </Button>
                 )
@@ -455,7 +500,7 @@ const removeInfoField = (index) => {
         placeholder={`info ${index + 1}`} // Add a placeholder for clarity
       />
       {formData.info.length > 1 && (
-        <Button size="sm" variant="danger" onClick={() => removeInfoField(index)}>x</Button>
+        <Button size="sm" variant="danger" onClick={() => {if(deleteWarning()) removeInfoField(index);}}>x</Button>
       )}
     </div>
   ))}
@@ -499,7 +544,7 @@ const removeInfoField = (index) => {
            
             {
                 formData.coursesAndFees.length > 1 && (
-                    <Button size="sm" variant="danger" onClick={() => removeCourse(index)}>
+                    <Button size="sm" variant="danger" onClick={() => { if(deleteWarning()) removeCourse(index); }}>
                        x
                     </Button>
                 )
@@ -547,7 +592,7 @@ const removeInfoField = (index) => {
             <Button
               size="sm"
               variant="danger"
-              onClick={() => removeCutoff(cutoffIndex)}
+              onClick={() => {if(deleteWarning()) removeCutoff(cutoffIndex); }}
             >
               x
             </Button>
@@ -596,7 +641,7 @@ const removeInfoField = (index) => {
                 <Button
                   size="sm"
                   variant="danger"
-                  onClick={() => removeStat(cutoffIndex, statIndex)}
+                  onClick={() => { if(deleteWarning()) removeStat(cutoffIndex, statIndex); }}
                 >
                   x
                 </Button>
@@ -615,7 +660,7 @@ const removeInfoField = (index) => {
         
        
         <div className="mb-3">
-          <Button variant="dark" type="submit">Upload College</Button>
+          <Button variant="dark" type="submit">Update College</Button>
         </div>
         
       </Form>
@@ -626,4 +671,4 @@ const removeInfoField = (index) => {
   );
 };
 
-export default CollegeUpload;
+export default CollegeEdit;

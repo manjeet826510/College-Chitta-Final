@@ -7,8 +7,15 @@ import Comment from "../models/commentModel.js";
 const articleRouter = express.Router();
 
 
-
-
+articleRouter.get("/admin", isAuth, isAdmin, async (req, res) => {
+  // console.log('/admin hitted');
+   
+  
+  const blogs = await Article.find()
+   
+ 
+  res.send({ blogs });
+});
 
 articleRouter.get("/:name",
   expressAsyncHandler(async (req, res) => {
@@ -18,6 +25,7 @@ articleRouter.get("/:name",
     try {
       // Find the article by name
       const blog = await Article.findOne({ name: name });
+      // console.log(blog);
 
       if (blog) {
         res.send(blog);
@@ -32,6 +40,21 @@ articleRouter.get("/:name",
   })
 );
 
+articleRouter.get("/:id",
+  expressAsyncHandler(async (req, res) => {
+    // console.log(req.params);
+    const blog = await Article.findOne({ _id: req.params.id });
+    if (blog) {
+      res.send(blog);
+    } else {
+      res.status(404).send({ message: "Blog Not Found" });
+    }
+  })
+);
+
+
+
+
 
 
 articleRouter.get("/", async (req, res) => {
@@ -45,8 +68,7 @@ articleRouter.get("/", async (req, res) => {
 
 
 
-articleRouter.post(
-  "/",
+articleRouter.post("/",
   isAuth,
   isAdmin,
   expressAsyncHandler(async (req, res) => {
@@ -78,10 +100,10 @@ articleRouter.post(
 
 // Save comment for a specific article
 articleRouter.post("/:name/comments", async (req, res) => {
-  console.log("articleRouter hit");
+  // console.log("articleRouter hit");
   try {
     const articleId = req.params.name;
-    console.log(req.body);
+    // console.log(req.body);
     const { author, text } = req.body;
     // Save the comment to the database and associate it with the article
     // Ensure to handle validation and error checking
@@ -103,6 +125,58 @@ articleRouter.get("/:name/comments", async (req, res) => {
     res.status(500).json({ message: error.message });
   }
 });
+
+
+
+
+
+articleRouter.put("/:name",
+  isAuth,
+  isAdmin,
+  expressAsyncHandler(async (req, res) => {
+    // console.log(req.body);
+    // console.log(req.params.name);
+    const article = await Article.findOne({ name: req.params.name });
+    // console.log(product);
+    if (article) {
+        article.name = req.body.name; 
+        article.title = req.body.title; 
+        article.thumbnail = req.body.image; 
+        article.content = req.body.content; 
+        
+
+      const updatedArticle = await article.save();
+    //   console.log(updatedArticle);
+      res.send({
+        _id: updatedArticle._id,
+        name: updatedArticle.name, 
+        title: updatedArticle.title, 
+        thumbnail: updatedArticle.thumbnail, 
+        content: updatedArticle.content, 
+       
+      });
+    } else {
+      res.status(404).send({ message: "Blog not found" });
+    }
+  })
+);
+
+articleRouter.delete("/:name",
+  isAuth,
+  isAdmin,
+  expressAsyncHandler(async (req, res) => {
+    // console.log(req.body);
+    // console.log(req.params.id);
+    const result = await Article.deleteOne({ name: req.params.name });
+    if (result.deletedCount > 0) {
+    //   console.log("College deleted successfully");
+      res.send(result);
+      // Additional logic after successful deletion
+    } else {
+      res.status(404).send({ message: "Blog not found" });
+    }
+  })
+);
 
 
 

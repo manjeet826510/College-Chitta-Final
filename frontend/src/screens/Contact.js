@@ -25,7 +25,7 @@ const Contact = () => {
         try {
           
           const { data } = await axios.post(
-            "https://manjeet-kumar.cyclic.app/",
+            "/api/contact/",
             {
                 name: formData.name, 
                 email: formData.email, 

@@ -1,4 +1,4 @@
-import React, { useContext, useEffect, useReducer } from "react";
+import React, { useContext, useEffect, useReducer, useState } from "react";
 import MessageBox from "../components/MessageBox";
 import Row from "react-bootstrap/esm/Row";
 import Col from "react-bootstrap/esm/Col";
@@ -8,6 +8,7 @@ import { Store } from "../Store";
 import getError from "../utils";
 import { Button, Spinner } from "react-bootstrap";
 import { useNavigate } from "react-router-dom";
+import axios from "axios";
 
 
 const reducer = (state, action) => {
@@ -29,11 +30,43 @@ const DashboardScreen = () => {
     error: "",
   });
 
+  const [users, setUsers] = useState([]);
+  const [colleges, setColleges] = useState([]);
+
   const navigate = useNavigate();
 
  
   const { state } = useContext(Store);
   const { userInfo } = state;
+
+  useEffect(() => {
+    const fetchUsers = async () => {
+      try {
+        const response = await axios.get('api/users');
+        setUsers(response.data);
+      } catch (error) {
+        console.error('Error fetching Users:', error.message);
+        dispatch({ type: "FETCH_FAIL", error: getError(error) });
+      }
+    };
+
+    const fetchColleges = async () => {
+      try {
+        const response = await axios.get('api/colleges');
+        setColleges(response.data);
+      } catch (error) {
+        console.error('Error fetching colleges:', error.message);
+        dispatch({ type: "FETCH_FAIL", error: getError(error) });
+      }
+    };
+
+    fetchUsers();
+    fetchColleges();
+  }, []);
+
+  
+ 
+  
 
   
 
@@ -42,6 +75,12 @@ const DashboardScreen = () => {
   };
   const handleUploadBlog = () => {
     navigate('/admin/dashboard/blog-upload');
+  };
+  const handleUpdateCollege = () => {
+    navigate('/admin/dashboard/college-update');
+  };
+  const handleUpdateBlog = () => {
+    navigate('/admin/dashboard/blog-update');
   };
   return (
     <div style={{padding: '5rem'}}>
@@ -60,7 +99,7 @@ const DashboardScreen = () => {
             <Col md={6}>
               <Card style={{padding: '2rem'}}>
                 <Card.Title>
-                  {100}
+                  {users.length}
                 </Card.Title>
                 <Card.Text>Total Users</Card.Text>
               </Card>
@@ -68,7 +107,7 @@ const DashboardScreen = () => {
             <Col md={6}>
               <Card style={{padding: '2rem'}}>
                 <Card.Title>
-                  {400}
+                  {colleges.length}
                 </Card.Title>
                 <Card.Text>Total Colleges</Card.Text>
               </Card>
@@ -81,6 +120,10 @@ const DashboardScreen = () => {
       <div style={{display: 'flex', justifyContent: 'center', alignItems: 'center', marginTop: '5rem'}}>
         <Button style={{margin: '1rem'}} variant="primary" onClick={handleUploadCollege}>Upload College</Button>
         <Button style={{margin: '1rem'}} variant="primary" onClick={handleUploadBlog}>Upload Blog</Button>
+      </div>
+      <div style={{display: 'flex', justifyContent: 'center', alignItems: 'center'}}>
+        <Button style={{margin: '1rem'}} variant="primary" onClick={handleUpdateCollege}>Update College</Button>
+        <Button style={{margin: '1rem'}} variant="primary" onClick={handleUpdateBlog}>Update Blog</Button>
       </div>
     </div>
   );

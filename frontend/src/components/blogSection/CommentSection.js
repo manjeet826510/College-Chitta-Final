@@ -1,5 +1,5 @@
-import React, { useContext, useState, useEffect } from 'react';
-import { Card, Form, Button } from 'react-bootstrap';
+import React, { useContext, useState, useEffect, useReducer } from 'react';
+import { Card, Form, Button, Spinner } from 'react-bootstrap';
 import CommentCard from './CommentCard';
 import { Store } from '../../Store';
 import getError from '../../utils';
@@ -7,6 +7,20 @@ import axios from 'axios';
 import { toast } from 'react-toastify';
 import { formatDistanceToNow } from 'date-fns';
 import { useNavigate } from 'react-router-dom';
+import MessageBox from '../MessageBox';
+
+const reducer = (state, action) => {
+    switch (action.type) {
+      case "FETCH_REQUEST":
+        return { ...state, loadingFetch: true };
+      case "FETCH_SUCCESS":
+        return { ...state, loadingFetch: false };
+      case "FETCH_FAIL":
+        return { ...state, loadingFetch: false, error: action.payload };
+      default:
+        return state;
+    }
+  };
 
 
 
@@ -19,6 +33,11 @@ const CommentSection = ({ articleName }) => {
   
   const { state } = useContext(Store);
   const { userInfo } = state;
+
+  const [{ loadingFetch, error }, dispatch] = useReducer(reducer, {
+    loadingFetch: false,
+    error: "",
+  });
 
   const formatTimestamp = (timestamp) => {
     return formatDistanceToNow(new Date(timestamp), { addSuffix: true });
@@ -72,19 +91,29 @@ const CommentSection = ({ articleName }) => {
   };
 
   useEffect(() => {
-    const fetchComments = async () => {
-      try {
-        const { data } = await axios.get(`/api/comments/${articleName}`);
-        console.log(data);
+  let isMounted = true; // Add a flag to track whether the component is mounted
+  const fetchComments = async () => {
+    try {
+      dispatch({ type: "FETCH_REQUEST" });
+      const { data } = await axios.get(`/api/comments/${articleName}`);
+      if (isMounted) { // Check if the component is still mounted before updating state
         setComments(data);
-      } catch (error) {
-        toast.error(getError(error));
+        dispatch({ type: "FETCH_SUCCESS" });
       }
-    };
+    } catch (error) {
+      dispatch({ type: "FETCH_FAIL" });
+    }
+  };
 
-    fetchComments();
-    // window.scrollTo(0, 0);
-  }, [articleName, userInfo, commenttoggle]);
+  fetchComments();
+
+  // Clean-up function to set comments to an empty array when the component unmounts or when articleName changes
+  return () => {
+    isMounted = false; // Set the flag to false when the component unmounts
+    setComments([]);
+  };
+}, [articleName, userInfo, commenttoggle]);
+
 
 
 
@@ -115,15 +144,38 @@ const CommentSection = ({ articleName }) => {
       </Form>
       
       {/* <div style={{ maxHeight: '300px', overflowY: 'auto' }}> */}
-        {comments.map((comment) => (
-          <CommentCard
-            key={comment.id}
-            author={comment.author}
-            img={comment.img}
-            text={comment.text}
-            timestamp={formatTimestamp(comment.createdAt)}
-          />
-        ))}
+      {
+        loadingFetch ? (
+            <div className="d-flex justify-content-center mt-5">
+            <Spinner animation="border" role="status">
+                <span className="visually-hidden">Loading...</span>
+            </Spinner>
+            </div>
+          ) : error ? (
+            <MessageBox variant="danger">{error}</MessageBox>
+          ) :
+
+          comments.length === 0 ? (
+            <div>No comments found</div>
+          )
+
+           :
+
+   (
+    comments.map((comment) => (
+      <CommentCard
+        key={comment.id}
+        author={comment.author}
+        img={comment.img}
+        text={comment.text}
+        timestamp={formatTimestamp(comment.createdAt)}
+      />
+    ))
+  )
+}
+
+      
+        
       {/* </div> */}
       
       
