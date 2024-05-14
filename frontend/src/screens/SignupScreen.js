@@ -136,7 +136,7 @@ const SignupScreen = () => {
           <Form.Label>Upload Profile Photo</Form.Label>
           <Form.Control
             type="file"
-            // required
+            required
             onChange={(e) => setImage(e.target.files[0])}
           />
         </Form.Group>
