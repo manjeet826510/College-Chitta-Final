@@ -32,6 +32,8 @@ const DashboardScreen = () => {
 
   const [users, setUsers] = useState([]);
   const [colleges, setColleges] = useState([]);
+  const [blogs, setBlogs] = useState([]);
+  const [reviews, setReviews] = useState([]);
 
   const navigate = useNavigate();
 
@@ -60,8 +62,30 @@ const DashboardScreen = () => {
       }
     };
 
+    const fetchBlogs = async () => {
+      try {
+        const response = await axios.get('api/blogs');
+        setBlogs(response.data);
+      } catch (error) {
+        console.error('Error fetching colleges:', error.message);
+        dispatch({ type: "FETCH_FAIL", error: getError(error) });
+      }
+    };
+
+    const fetchReviews = async () => {
+      try {
+        const response = await axios.get('api/reviews');
+        setReviews(response.data);
+      } catch (error) {
+        console.error('Error fetching colleges:', error.message);
+        dispatch({ type: "FETCH_FAIL", error: getError(error) });
+      }
+    };
+
     fetchUsers();
     fetchColleges();
+    fetchBlogs();
+    fetchReviews();
   }, []);
 
   
@@ -114,17 +138,29 @@ const DashboardScreen = () => {
             </Col>
             
           </Row>
+          <Row>
+            <Col md={6}>
+              <Card style={{padding: '2rem'}}>
+                <Card.Title>
+                  {blogs.length}
+                </Card.Title>
+                <Card.Text>Total Blogs</Card.Text>
+              </Card>
+            </Col>
+            <Col md={6}>
+              <Card style={{padding: '2rem'}}>
+                <Card.Title>
+                  {reviews.length}
+                </Card.Title>
+                <Card.Text>Total Reviews</Card.Text>
+              </Card>
+            </Col>
+            
+          </Row>
           
         </>
       )}
-      <div style={{display: 'flex', justifyContent: 'center', alignItems: 'center', marginTop: '5rem'}}>
-        <Button style={{margin: '1rem'}} variant="primary" onClick={handleUploadCollege}>Upload College</Button>
-        <Button style={{margin: '1rem'}} variant="primary" onClick={handleUploadBlog}>Upload Blog</Button>
-      </div>
-      <div style={{display: 'flex', justifyContent: 'center', alignItems: 'center'}}>
-        <Button style={{margin: '1rem'}} variant="primary" onClick={handleUpdateCollege}>Update College</Button>
-        <Button style={{margin: '1rem'}} variant="primary" onClick={handleUpdateBlog}>Update Blog</Button>
-      </div>
+      
     </div>
   );
 };

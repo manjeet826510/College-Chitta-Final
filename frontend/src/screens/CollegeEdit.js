@@ -106,7 +106,7 @@ const CollegeEdit = () => {
           },
         }
       );
-      navigate('/admin/dashboard/college-update');
+      navigate('/admin/collegelist');
       toast.success("College updated successfully");
       // console.log(data);
       // navigate(`/admin/product/${data.product._id}`)

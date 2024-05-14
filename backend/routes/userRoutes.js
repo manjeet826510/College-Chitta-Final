@@ -2,7 +2,7 @@ import express from "express";
 import expressAsyncHandler from "express-async-handler";
 import User from "../models/userModel.js";
 import bcrypt from "bcryptjs";
-import {generateToken, isAuth, sendEmail} from "../utils.js";
+import {generateToken, isAdmin, isAuth, sendEmail} from "../utils.js";
 import crypto from 'crypto';
 import dotenv from "dotenv"
 import Token from "../models/tokenModel.js";
@@ -16,6 +16,10 @@ const generateResetToken = () => {
   return crypto.randomBytes(32).toString('hex');
 };
 
+
+
+
+
 userRouter.get("/", async (req, res) => {
 
   try {
@@ -28,6 +32,10 @@ userRouter.get("/", async (req, res) => {
 
 
 });
+
+
+
+
 
 
 userRouter.post("/signin",
@@ -181,6 +189,60 @@ userRouter.post("/reset-password",
       // Handle other errors
       console.error(error);
       return res.status(500).send({ message: 'Internal server error' });
+    }
+  })
+);
+
+userRouter.get("/admin", isAuth, isAdmin, async (req, res) => {
+   
+  
+  const users = await User.find()
+   
+ 
+  res.json({ users });
+});
+
+
+
+// for admin
+
+userRouter.put("/admin/:userId", isAuth, isAdmin, 
+  
+  expressAsyncHandler(async (req, res) => {
+    const userId = req.params.userId;
+    const { isAdmin: newAdminStatus } = req.body;
+
+    const user = await User.findById(userId);
+
+
+    if (user) {
+      // Update the isAdmin field of the user
+      user.isAdmin = newAdminStatus;
+
+      // Save the updated user object
+      const updatedUser = await user.save();
+
+      res.status(200).send({ message: "User isAdmin status updated", user: updatedUser });
+    } else {
+      res.status(404).send({ message: "User not found" });
+    }
+  })
+);
+
+
+userRouter.delete("/admin/verify/:userId",
+  isAuth,
+  isAdmin,
+  expressAsyncHandler(async (req, res) => {
+    // console.log(req.body);
+    // console.log(req.params.id);
+    const result = await User.deleteOne({ _id: req.params.userId });
+    if (result.deletedCount > 0) {
+    //   console.log("College deleted successfully");
+      res.send(result);
+      // Additional logic after successful deletion
+    } else {
+      res.status(404).send({ message: "User not found" });
     }
   })
 );

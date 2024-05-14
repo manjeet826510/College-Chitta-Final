@@ -36,6 +36,8 @@ import BlogListScreen from './screens/BlogListScreen';
 import BlogEdit from './screens/BlogEdit';
 import ProtectedRoute from './components/ProtectedRoute';
 import ReviewUpload from './screens/ReviewUpload';
+import ReviewListScreen from './screens/ReviewListScreen';
+import UserListScreen from './screens/UserListScreen';
 
 
 
@@ -101,7 +103,7 @@ const App = () => {
                 }
               />
             <Route
-                path="/admin/dashboard/college-upload"
+                path="/admin/college-upload"
                 element={
                   <AdminRoute>
                     {" "}
@@ -119,7 +121,7 @@ const App = () => {
                 }
               />
             <Route
-                path="/admin/dashboard/college-update"
+                path="/admin/collegelist"
                 element={
                   <AdminRoute>
                     {" "}
@@ -128,7 +130,25 @@ const App = () => {
                 }
               />
             <Route
-                path="/admin/dashboard/college-edit/:id"
+                path="/admin/reviewlist"
+                element={
+                  <AdminRoute>
+                    {" "}
+                    <ReviewListScreen />{" "}
+                  </AdminRoute>
+                }
+              />
+            <Route
+                path="/admin/userlist"
+                element={
+                  <AdminRoute>
+                    {" "}
+                    <UserListScreen />{" "}
+                  </AdminRoute>
+                }
+              />
+            <Route
+                path="/admin/college-edit/:id"
                 element={
                   <AdminRoute>
                     {" "}

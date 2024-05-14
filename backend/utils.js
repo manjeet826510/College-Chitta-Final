@@ -24,6 +24,7 @@ export const generateToken = (user) => {
 
 export const isAuth = (req, res, next) => {
   const authorization = req.headers.authorization;
+  // console.log(authorization);
   if (authorization) {
     if (authorization === "RazorPay") {
       return;

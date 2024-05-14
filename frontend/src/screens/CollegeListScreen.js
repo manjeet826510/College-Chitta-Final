@@ -7,7 +7,7 @@ import { Store } from "../Store";
 import { Helmet } from "react-helmet-async";
 import Row from "react-bootstrap/esm/Row";
 import Col from "react-bootstrap/esm/Col";
-import { Spinner } from "react-bootstrap";
+import { Container, Form, Spinner } from "react-bootstrap";
 import { useNavigate } from "react-router-dom";
 import { toast } from "react-toastify";
 
@@ -78,7 +78,7 @@ const CollegeListScreen = () => {
   }, [colleges, searchQuery]);
 
   const handleEditCollege = (cid) => {
-    navigate(`/admin/dashboard/college-edit/${cid}`);
+    navigate(`/admin/college-edit/${cid}`);
   };
 
   const handleDeleteCollege = (cid) => {
@@ -112,8 +112,12 @@ const CollegeListScreen = () => {
 
   };
 
+  const handleUploadCollege = ()=>[
+    navigate('/admin/college-upload')
+  ]
+
   return (
-    <div>
+    <Container>
       <Helmet>
         <title>College List</title>
       </Helmet>
@@ -122,7 +126,8 @@ const CollegeListScreen = () => {
         <Col>
           <h1>Colleges</h1>
           {/* Search bar */}
-          <input
+          <Button onClick={handleUploadCollege} className="mt-1 mb-3">Upload College</Button>
+          <Form.Control
             type="text"
             placeholder="Search by name..."
             value={searchQuery}
@@ -167,7 +172,7 @@ const CollegeListScreen = () => {
           </div>
         </>
       )}
-    </div>
+    </Container>
   );
 };
 

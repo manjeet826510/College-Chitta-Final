@@ -6,6 +6,18 @@ import Comment from "../models/commentModel.js";
 
 const articleRouter = express.Router();
 
+articleRouter.get("/", async (req, res) => {
+
+  try {
+    const blogs = await Article.find();
+    res.json(blogs);
+  } catch (err) {
+    res.status(500).json({ message: err.message });
+  }
+});
+
+
+
 
 articleRouter.get("/admin", isAuth, isAdmin, async (req, res) => {
   // console.log('/admin hitted');
@@ -16,6 +28,8 @@ articleRouter.get("/admin", isAuth, isAdmin, async (req, res) => {
  
   res.send({ blogs });
 });
+
+
 
 articleRouter.get("/:name",
   expressAsyncHandler(async (req, res) => {
@@ -57,14 +71,7 @@ articleRouter.get("/:id",
 
 
 
-articleRouter.get("/", async (req, res) => {
-  try {
-    const articles = await Article.find();
-    res.json(articles);
-  } catch (err) {
-    res.status(500).json({ message: err.message });
-  }
-});
+
 
 
 

@@ -63,7 +63,7 @@ const CollegeUpload = () => {
           },
         }
       );
-      navigate('/admin/dashboard/college-update');
+      navigate('/admin/collegelist');
       toast.success("College uploaded successfully");
       console.log(data);
       // navigate(`/admin/product/${data.product._id}`)

@@ -104,18 +104,30 @@ const NavbarComp = () => {
                   )}
 
 
+                  
+
                   {/*admin starts here */}
 
                   {userInfo && userInfo.isAdmin && (
-                    
-                      <Link to="/admin/dashboard" className="nav-link">
-                        Dashboard
-                      </Link>
-                      
-                   
+                    <NavDropdown title="Admin" id="admin-nav-dropdown">
+                      <LinkContainer to="/admin/dashboard">
+                        <NavDropdown.Item>Dashboard</NavDropdown.Item>
+                      </LinkContainer>
+                      <LinkContainer to="/admin/collegelist">
+                        <NavDropdown.Item>Colleges</NavDropdown.Item>
+                      </LinkContainer>
+                      <LinkContainer to="/admin/reviewlist">
+                        <NavDropdown.Item>Reviews</NavDropdown.Item>
+                      </LinkContainer>
+                      <LinkContainer to="/admin/userlist">
+                        <NavDropdown.Item>Users</NavDropdown.Item>
+                      </LinkContainer>
+                    </NavDropdown>
                   )}
 
                   {/* admin ends here*/}
+
+                
                  
                   
                   
