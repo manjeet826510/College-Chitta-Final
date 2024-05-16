@@ -220,7 +220,8 @@ background-color: #000;
 .secondHalf{
   /* background-color: rgb(43, 47, 46); */
   display: flex;
-  padding: 2rem;
+  padding: 0;
+  padding-top: 2rem;
   justify-content: center;
   align-items: center;
   margin-right: 4rem;
