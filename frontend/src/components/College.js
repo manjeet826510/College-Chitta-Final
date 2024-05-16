@@ -65,15 +65,15 @@ const College = (props) => {
          className="card-img-top" 
          />
       </Link>
-      <Card.Body  style={{backgroundColor: '', width: '100%'}}>
+      <Card.Body  style={{ width: '100%'}}>
         <Link to={`/college/${college.slug}`} style={{textDecoration: 'none', color: 'black'}}>
-          <Card.Title className="college-card-font-mobile-name" style={{backgroundColor: ''}}>{college.name}</Card.Title>
+          <Card.Title className="college-card-font-mobile-name" >{college.name}</Card.Title>
         </Link>
         <Card.Text className="college-card-font-mobile-rating">Rating: {college.rating}</Card.Text>
         
         
       </Card.Body>
-      <div style={{backgroundColor: '', width: '100%'}}>
+      <div style={{ width: '100%'}}>
       <Button style={{marginLeft: '1rem', marginBottom:'1rem'}}  variant="dark" className="visit-college-btn" href={college.videoReviewLink} target="__blank">Video Review</Button>
       </div>
     </Card>

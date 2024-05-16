@@ -412,7 +412,7 @@ background-color: #000;
   .card-img-top{
    width: 250px;
    height: 150px;
-     background-color: #f08000;
+     /* background-color: #f08000; */
      
  }
 }
