@@ -1,6 +1,7 @@
 import React, { useEffect, useState } from 'react';
 import { useLocation } from 'react-router-dom';
 import Spinner from 'react-bootstrap/Spinner';
+import { Helmet } from 'react-helmet-async';
 
 const CounsellingScreen = () => {
   const location = useLocation();
@@ -22,6 +23,9 @@ const CounsellingScreen = () => {
 
   return (
     <div>
+      <Helmet>
+        <title>Admission</title>
+      </Helmet>
       {loading && (
         <div className="d-flex justify-content-center mt-5">
           <Spinner animation="border" role="status">

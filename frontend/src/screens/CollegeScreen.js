@@ -6,6 +6,7 @@ import CollegeNotFound from "./CollegeNotFound";
 import axios from 'axios';
 import Spinner from 'react-bootstrap/Spinner';
 import MessageBox from "../components/MessageBox";
+import { Helmet } from "react-helmet-async";
 
 
 const CollegeScreen = () => {
@@ -52,6 +53,9 @@ const CollegeScreen = () => {
 
   return (
     <>
+    <Helmet>
+        <title>{college.name}</title>
+      </Helmet>
       <div className="position-relative">
         <Container fluid className="college-img-header" style={{backgroundImage: `url(${college.image})`}}>
           {/* Background image */}

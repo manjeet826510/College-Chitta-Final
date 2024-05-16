@@ -24,7 +24,7 @@ const RecentlyVisitedCollege = ({ colleges, error }) => {
         <div className="colleges">
           <Row className="justify-content-center"> {/* Align items in center */}
             {colleges.slice(0, 6).map((college) => ( // Slice the array to get only the first 6 items
-              <Col xs={12} lg={3} md={6} className="mb-3" key={college.slug}>
+              <Col xs={6} lg={3} md={6} className="mb-3" key={college.slug}>
                 <College college={college} />
               </Col>
             ))}

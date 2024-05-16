@@ -31,7 +31,7 @@ const NavbarComp = () => {
               <LinkContainer to="/">
                 <Navbar.Brand>
                         <img
-                        src="img.jpg"
+                        src="https://mymernbucket-amazona.s3.ap-south-1.amazonaws.com/img.jpg"
                         width="30"
                         height="30"
                         className="d-inline-block align-top"

@@ -7,6 +7,7 @@ import BlogAbout from './BlogAbout';
 import BlogArticleList from './BlogArticleList';
 import BlogArticle from './BlogArticle';
 import ArticlesList from './BlogArticleList';
+import { Helmet } from 'react-helmet-async';
 
 
 function Blog() {
@@ -17,6 +18,9 @@ function Blog() {
 
     return (
         <>
+        <Helmet>
+        <title>Blog</title>
+      </Helmet>
             <Navbar bg="light" data-bs-theme="light" style={{ border: "solid black 1px" }}>
                 <Container>
                     <Nav className="me-auto justify-content-center flex-column flex-sm-row" style={{ margin: '0 auto' }}>

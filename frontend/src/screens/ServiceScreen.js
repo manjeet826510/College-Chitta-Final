@@ -2,10 +2,14 @@ import React from 'react';
 import { Container, Row, Col, Card } from 'react-bootstrap';
 import { FaUniversity, FaGraduationCap, FaComments, FaBook } from 'react-icons/fa';
 import '../index.css'
+import { Helmet } from 'react-helmet-async';
 
 const ServiceScreen = () => {
   return (
     <Container className="mt-5">
+      <Helmet>
+        <title>Services</title>
+      </Helmet>
       <h1 className="text-center mb-5">Our Services</h1>
       <Row xs={1} md={2} lg={4} className="g-4">
         <ServiceCard

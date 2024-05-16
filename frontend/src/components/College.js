@@ -6,6 +6,7 @@ import Rating from "./Rating";
 
 
 import Modal from 'react-bootstrap/Modal';
+import { Helmet } from "react-helmet-async";
 
 function MyVerticallyCenteredModal(props) {
   return (
@@ -56,6 +57,7 @@ const College = (props) => {
   };
   return (
     <>
+    
     <Card  className="college-card" style={{ display: "flex", flexDirection: "column", height: "100%", alignItems: 'center' }}>
       <Link to={`/college/${college.slug}`}>
         <img src={college.image}
@@ -63,14 +65,17 @@ const College = (props) => {
          className="card-img-top" 
          />
       </Link>
-      <Card.Body>
+      <Card.Body  style={{backgroundColor: '', width: '100%'}}>
         <Link to={`/college/${college.slug}`} style={{textDecoration: 'none', color: 'black'}}>
-          <Card.Title>{college.name}</Card.Title>
+          <Card.Title className="college-card-font-mobile-name" style={{backgroundColor: ''}}>{college.name}</Card.Title>
         </Link>
-        <Card.Text>Rating: {college.rating}</Card.Text>
-        <Button  variant="dark" className="visit-college-btn" href={college.videoReviewLink} target="__blank">Video Review</Button>
+        <Card.Text className="college-card-font-mobile-rating">Rating: {college.rating}</Card.Text>
+        
         
       </Card.Body>
+      <div style={{backgroundColor: '', width: '100%'}}>
+      <Button style={{marginLeft: '1rem', marginBottom:'1rem'}}  variant="dark" className="visit-college-btn" href={college.videoReviewLink} target="__blank">Video Review</Button>
+      </div>
     </Card>
     <MyVerticallyCenteredModal
     show={modalShow}

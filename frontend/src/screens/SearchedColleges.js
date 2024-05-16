@@ -9,9 +9,9 @@ const SearchedColleges = ({colleges}) => {
     <div className='featured-colleges'>
         <h1>Searched Colleges</h1>
         <div className="colleges">
-            <Row>
+            <Row className="justify-content-center">
                 {colleges.map((college) => (
-                <Col xs={12} lg={3} md={6} className="mb-3" key={college.slug}>
+                <Col xs={6} lg={3} md={6} className="mb-3" key={college.slug}>
                     <College college={college} />
                 </Col>
                 ))}

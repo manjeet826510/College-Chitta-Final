@@ -9,6 +9,7 @@ import getError from "../utils";
 import { Button, Spinner } from "react-bootstrap";
 import { useNavigate } from "react-router-dom";
 import axios from "axios";
+import { Helmet } from "react-helmet-async";
 
 
 const reducer = (state, action) => {
@@ -108,6 +109,9 @@ const DashboardScreen = () => {
   };
   return (
     <div style={{padding: '5rem'}}>
+      <Helmet>
+        <title>Dashboard</title>
+      </Helmet>
       <h1>Dashboard</h1>
       {loading ? (
         <div className="d-flex justify-content-center mt-5">

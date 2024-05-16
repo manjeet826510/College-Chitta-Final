@@ -12,6 +12,7 @@ import CommentSection from "./CommentSection";
 import CommentCard from "./CommentCard";
 import { toast } from "react-toastify";
 import getError from "../../utils";
+import { Helmet } from "react-helmet-async";
 
 // Components
 
@@ -87,6 +88,9 @@ if (blogNotFound) {
   return (
     <>
     <Container style={{marginTop: '1rem', marginBottom: '1rem'}}>
+    <Helmet>
+        <title>{article.title}</title>
+      </Helmet>
       <h1 className='sm:text-4xl text-2xl font-bold my-6 text-gray-900'>
         {article.title}
       </h1>

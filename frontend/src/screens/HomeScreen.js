@@ -6,6 +6,7 @@ import RecentlyVisitedCollege from '../components/RecentlyVisitedCollege';
 import SearchBoxMobile from '../components/SearchBoxMobile';
 import Testimonials from '../components/Testimonials';
 import axios from '../api';
+import { Helmet } from 'react-helmet-async';
 
 
 const HomeScreen = () => {
@@ -28,6 +29,9 @@ const HomeScreen = () => {
 
   return (
     <>
+    <Helmet>
+        <title>College Chitta</title>
+      </Helmet>
       <HomeTop />
       <FeaturedCollege colleges={colleges} error={error} />
       <RecentlyVisitedCollege colleges={colleges} error={error} />

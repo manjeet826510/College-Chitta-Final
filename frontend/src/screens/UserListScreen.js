@@ -59,6 +59,7 @@ const AdminToggle = ({ isAdmin, userId, userInfo, user }) => {
       label={isAdminUser ? 'Admin' : 'Normal'}
       checked={isAdminUser}
       onChange={handleToggleChange}
+      disabled={userInfo.email === user.email} 
     />
   );
 };
@@ -199,10 +200,11 @@ const handleDeleteSubmit = async (userId) => {
     </td>
     <td>
       {/* Render the AdminToggle component */}
-      <AdminToggle isAdmin={user.isAdmin} userId={user._id} userInfo={userInfo} user = {user} />
+      
+      <AdminToggle isAdmin={user.isAdmin} userId={user._id} userInfo={userInfo} user={user} />
     </td>
     <td>
-      <Button variant="danger" onClick={()=> handleDeleteUser(user._id)}>
+      <Button disabled={userInfo.email === user.email}  variant="danger" onClick={()=> handleDeleteUser(user._id)}>
       <i class="fas fa-trash"></i>
       </Button>
     </td>

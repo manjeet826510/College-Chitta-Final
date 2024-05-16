@@ -3,6 +3,7 @@ import { Container, Row, Col, Form, Button } from 'react-bootstrap';
 import getError from '../utils';
 import { toast } from 'react-toastify';
 import axios from 'axios';
+import { Helmet } from 'react-helmet-async';
 
 const Contact = () => {
     const [formData, setFormData] = useState({
@@ -57,6 +58,9 @@ const Contact = () => {
     return (
         <section id="contactsid">
             <Container>
+            <Helmet>
+        <title>Contact Us</title>
+      </Helmet>
                 <h2 className="text-center">CONTACT US</h2>
                 <Row className="justify-content-center">
                     <Col md={6} className="contact-card">

@@ -1,12 +1,16 @@
 import React from 'react';
 import { Container, Row, Col, Button } from 'react-bootstrap';
 import AuthorsSection from '../components/AuthorsSection';
+import { Helmet } from 'react-helmet-async';
 
 const ServicesPage = () => {
   
 
   return (
     <div style={{marginTop: '3rem', marginBottom: '3rem'}}>
+      <Helmet>
+        <title>About</title>
+      </Helmet>
       {/* College Chitta Overview */}
       <section id="college-chitta">
         <Container>

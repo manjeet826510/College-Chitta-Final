@@ -8,7 +8,7 @@ import MessageBox from './MessageBox';
 
 const FeaturedCollege = ({ colleges, error }) => {
   return (
-    <div className='featured-colleges'>
+    <div className='featured-colleges' >
   <h1>Featured Colleges</h1>
   {error ? (
     <MessageBox variant="danger">{error}</MessageBox>
@@ -20,10 +20,10 @@ const FeaturedCollege = ({ colleges, error }) => {
         </Spinner>
       </div>
     ) : (
-      <div className="colleges">
+      <div className="colleges" >
         <Row className="justify-content-center"> {/* Align items in center */}
           {colleges.map((college) => (
-            <Col xs={12} lg={3} md={6} className="mb-3" key={college.slug}>
+            <Col xs={6} lg={3} md={6} className="mb-3" key={college.slug}>
               <College college={college} />
             </Col>
           ))}

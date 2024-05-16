@@ -28,7 +28,9 @@ const HomeTop = () => {
           <Col md={12} lg={6}>
            
             <div className="secondHalf">
-              <img src="img.jpg" alt="Laptop Image" className="hometop-logo" />
+              {/* <img src="img.jpg" alt="Laptop Image" className="hometop-logo" /> */}
+              <video className="hometop-logo" autoPlay loop controls={false} muted src="https://videos.pexels.com/video-files/19990812/19990812-uhd_2560_1440_30fps.mp4"></video>
+
             </div>
           </Col>
           </Row>
