@@ -17,17 +17,35 @@ articleRouter.get("/", async (req, res) => {
 });
 
 
+articleRouter.get("/:slug",
+  expressAsyncHandler(async (req, res) => {
+    console.log(req.params );
+    const blog = await Article.findOne({ slug: req.params.slug }).populate("author", "name");
+    if (blog) {
+      console.log(blog);
+      res.send(blog);
+    } else {
+      res.status(404).send({ message: "Blog Not Found" });
+    }
+  })
+);
 
 
-articleRouter.get("/admin", isAuth, isAdmin, async (req, res) => {
+articleRouter.get("/admin/list-articles", isAuth, isAdmin, async (req, res) => {
   // console.log('/admin hitted');
    
   
-  const blogs = await Article.find()
+  const blogs = await Article.find().populate("author", "name")
    
  
   res.send({ blogs });
 });
+
+
+
+
+
+
 
 
 
@@ -38,7 +56,7 @@ articleRouter.get("/:name",
 
     try {
       // Find the article by name
-      const blog = await Article.findOne({ name: name });
+      const blog = await Article.findOne({ name: name }).populate("author", "name");
       // console.log(blog);
 
       if (blog) {
@@ -54,24 +72,6 @@ articleRouter.get("/:name",
   })
 );
 
-articleRouter.get("/:id",
-  expressAsyncHandler(async (req, res) => {
-    // console.log(req.params);
-    const blog = await Article.findOne({ _id: req.params.id });
-    if (blog) {
-      res.send(blog);
-    } else {
-      res.status(404).send({ message: "Blog Not Found" });
-    }
-  })
-);
-
-
-
-
-
-
-
 
 
 
@@ -84,10 +84,11 @@ articleRouter.post("/",
     const newArticle = new Article({
       
 
-        name: req.body.name, 
+        slug: req.body.slug, 
         title: req.body.title, 
         thumbnail: req.body.thumbnail, 
         content: req.body.content,
+        author: req.body.author,
 
         
 
@@ -134,19 +135,16 @@ articleRouter.get("/:name/comments", async (req, res) => {
 });
 
 
-
-
-
-articleRouter.put("/:name",
+articleRouter.put("/:slug",
   isAuth,
   isAdmin,
   expressAsyncHandler(async (req, res) => {
     // console.log(req.body);
     // console.log(req.params.name);
-    const article = await Article.findOne({ name: req.params.name });
+    const article = await Article.findOne({ slug: req.params.slug }).populate("author", "name");
     // console.log(product);
     if (article) {
-        article.name = req.body.name; 
+        article.slug = req.body.slug; 
         article.title = req.body.title; 
         article.thumbnail = req.body.image; 
         article.content = req.body.content; 
@@ -160,6 +158,7 @@ articleRouter.put("/:name",
         title: updatedArticle.title, 
         thumbnail: updatedArticle.thumbnail, 
         content: updatedArticle.content, 
+        author: updatedArticle.author
        
       });
     } else {
@@ -168,13 +167,45 @@ articleRouter.put("/:name",
   })
 );
 
-articleRouter.delete("/:name",
+
+// articleRouter.put("/:name",
+//   isAuth,
+//   isAdmin,
+//   expressAsyncHandler(async (req, res) => {
+//     // console.log(req.body);
+//     // console.log(req.params.name);
+//     const article = await Article.findOne({ name: req.params.name });
+//     // console.log(product);
+//     if (article) {
+//         article.name = req.body.name; 
+//         article.title = req.body.title; 
+//         article.thumbnail = req.body.image; 
+//         article.content = req.body.content; 
+        
+
+//       const updatedArticle = await article.save();
+//     //   console.log(updatedArticle);
+//       res.send({
+//         _id: updatedArticle._id,
+//         name: updatedArticle.name, 
+//         title: updatedArticle.title, 
+//         thumbnail: updatedArticle.thumbnail, 
+//         content: updatedArticle.content, 
+       
+//       });
+//     } else {
+//       res.status(404).send({ message: "Blog not found" });
+//     }
+//   })
+// );
+
+articleRouter.delete("/:id",
   isAuth,
   isAdmin,
   expressAsyncHandler(async (req, res) => {
     // console.log(req.body);
     // console.log(req.params.id);
-    const result = await Article.deleteOne({ name: req.params.name });
+    const result = await Article.deleteOne({ _id: req.params.id });
     if (result.deletedCount > 0) {
     //   console.log("College deleted successfully");
       res.send(result);

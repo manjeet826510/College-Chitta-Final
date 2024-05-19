@@ -10,27 +10,24 @@ import { useNavigate } from 'react-router-dom';
 import MessageBox from '../MessageBox';
 
 const reducer = (state, action) => {
-    switch (action.type) {
-      case "FETCH_REQUEST":
-        return { ...state, loadingFetch: true };
-      case "FETCH_SUCCESS":
-        return { ...state, loadingFetch: false };
-      case "FETCH_FAIL":
-        return { ...state, loadingFetch: false, error: action.payload };
-      default:
-        return state;
-    }
-  };
+  switch (action.type) {
+    case "FETCH_REQUEST":
+      return { ...state, loadingFetch: true };
+    case "FETCH_SUCCESS":
+      return { ...state, loadingFetch: false };
+    case "FETCH_FAIL":
+      return { ...state, loadingFetch: false, error: action.payload };
+    default:
+      return state;
+  }
+};
 
-
-
-const CommentSection = ({ articleName }) => {
-    const navigate = useNavigate();
-
+const CommentSection = ({ articleId, articleName }) => {
+  const navigate = useNavigate();
   const [comments, setComments] = useState([]);
   const [comment, setComment] = useState('');
-  const [commenttoggle, setCommenttoggle] = useState(true);
-  
+  const [commentHeight, setCommentHeight] = useState('auto');
+
   const { state } = useContext(Store);
   const { userInfo } = state;
 
@@ -39,28 +36,32 @@ const CommentSection = ({ articleName }) => {
     error: "",
   });
 
+  const [isVisible, setIsVisible] = useState(!document.hidden);
+
+  const handleVisibilityChange = () => {
+    setIsVisible(!document.hidden);
+  };
+
+  useEffect(() => {
+    document.addEventListener('visibilitychange', handleVisibilityChange);
+    return () => {
+      document.removeEventListener('visibilitychange', handleVisibilityChange);
+    };
+  }, []);
+
   const formatTimestamp = (timestamp) => {
     return formatDistanceToNow(new Date(timestamp), { addSuffix: true });
   };
-  
-
-
-
-  
 
   const saveCommentToDB = async () => {
     try {
-        console.log(userInfo.name);
-        console.log(userInfo.image);
-        console.log(comment);
-        console.log(articleName);
       const { data } = await axios.post(
         '/api/comments',
         {
           author: userInfo.name,
           img: userInfo.image,
           text: comment,
-          articleName: articleName,
+          articleId: articleId,
         },
         {
           headers: {
@@ -69,9 +70,9 @@ const CommentSection = ({ articleName }) => {
         }
       );
       toast.success('Comment added successfully');
-      commenttoggle ? setCommenttoggle(false): setCommenttoggle(true);
-    //   setComments([...comments, data]); // Add the new comment to the comments array
       setComment('');
+      setCommentHeight('auto');
+      setComments([data, ...comments]); // Add the new comment to the top of the list
     } catch (err) {
       toast.error(getError(err));
     }
@@ -91,38 +92,69 @@ const CommentSection = ({ articleName }) => {
   };
 
   useEffect(() => {
-  let isMounted = true; // Add a flag to track whether the component is mounted
-  const fetchComments = async () => {
-    try {
-      dispatch({ type: "FETCH_REQUEST" });
-      const { data } = await axios.get(`/api/comments/${articleName}`);
-      if (isMounted) { // Check if the component is still mounted before updating state
-        setComments(data);
-        dispatch({ type: "FETCH_SUCCESS" });
+    let isMounted = true;
+    const fetchComments = async () => {
+      try {
+        dispatch({ type: "FETCH_REQUEST" });
+        // console.log(`/api/comments/${articleId}`);
+        const { data } = await axios.get(`/api/comments/${articleId}`);
+        if (isMounted) {
+          setComments(data);
+          dispatch({ type: "FETCH_SUCCESS" });
+        }
+      } catch (error) {
+        dispatch({ type: "FETCH_FAIL" });
       }
-    } catch (error) {
-      dispatch({ type: "FETCH_FAIL" });
-    }
-  };
+    };
 
-  fetchComments();
+    fetchComments();
 
-  // Clean-up function to set comments to an empty array when the component unmounts or when articleName changes
-  return () => {
-    isMounted = false; // Set the flag to false when the component unmounts
-    setComments([]);
-  };
-}, [articleName, userInfo, commenttoggle]);
-
-
-
+    return () => {
+      isMounted = false;
+      setComments([]);
+    };
+  }, [isVisible, articleName,articleId, userInfo, commentHeight]);
 
   const handleChange = (event) => {
-    if(!userInfo){
-        navigate(`/signin?redirect=/article/${articleName}`);
+    if (!userInfo) {
+      navigate(`/signin?redirect=/article/${articleName}`);
     }
     setComment(event.target.value);
+    autoResizeTextarea(event.target);
   };
+
+  const autoResizeTextarea = (element) => {
+    element.style.height = 'auto';
+    element.style.height = `${element.scrollHeight}px`;
+    setCommentHeight(`${element.scrollHeight}px`);
+  };
+
+  const handleUpdateComment = (id, newText) => {
+    setComments((prevComments) => {
+      const updatedComments = prevComments.map((comment) =>
+        comment._id === id ? { ...comment, text: newText, updatedAt: new Date().toISOString() } : comment
+      );
+      toast.success('Comment updated successfully')
+      return updatedComments.sort((a, b) => new Date(b.updatedAt) - new Date(a.updatedAt));
+    });
+  };
+
+  const onDelete = async (id) => {
+    if(!window.confirm('Do you really want to delete this review')) 
+      return;
+    try {
+      await axios.delete(`/api/comments/${id}`, {
+        headers: {
+          authorization: `Bearer ${userInfo.jwtToken}`,
+        },
+      });
+      toast.success('Comment deleted successfully');
+      setComments(comments.filter(comment => comment._id !== id));
+    } catch (err) {
+      toast.error(getError(err));
+    }
+  };
+  
 
   return (
     <div>
@@ -132,53 +164,45 @@ const CommentSection = ({ articleName }) => {
           <Form.Control
             value={comment}
             as="textarea"
-            rows={3}
             placeholder="Add a comment..."
             required
             onChange={handleChange}
+            style={{ resize: 'none', overflowY: 'hidden', height: commentHeight }}
+            autoFocus
           />
         </Form.Group>
         <Button style={{ marginTop: '0.5rem', marginBottom: '1rem' }} variant="primary" type="submit">
           Comment
         </Button>
       </Form>
-      
-      {/* <div style={{ maxHeight: '300px', overflowY: 'auto' }}> */}
-      {
-        loadingFetch ? (
-            <div className="d-flex justify-content-center mt-5">
-            <Spinner animation="border" role="status">
-                <span className="visually-hidden">Loading...</span>
-            </Spinner>
-            </div>
-          ) : error ? (
-            <MessageBox variant="danger">{error}</MessageBox>
-          ) :
 
-          comments.length === 0 ? (
-            <div>No comments found</div>
-          )
-
-           :
-
-   (
-    comments.map((comment) => (
-      <CommentCard
-        key={comment.id}
-        author={comment.author}
-        img={comment.img}
-        text={comment.text}
-        timestamp={formatTimestamp(comment.createdAt)}
-      />
-    ))
-  )
-}
-
-      
-        
-      {/* </div> */}
-      
-      
+      {loadingFetch ? (
+        <div className="d-flex justify-content-center mt-5">
+          <Spinner animation="border" role="status">
+            <span className="visually-hidden">Loading...</span>
+          </Spinner>
+        </div>
+      ) : error ? (
+        <MessageBox variant="danger">{error}</MessageBox>
+      ) : comments.length === 0 ? (
+        <div>No comments found</div>
+      ) : (
+        comments
+          .sort((a, b) => new Date(b.updatedAt) - new Date(a.updatedAt)) // Sort comments by updatedAt in descending order
+          .map((comment) => (
+            <CommentCard
+              key={comment._id}
+              author={comment.author.name}
+              img={comment.img}
+              text={comment.text}
+              timestamp={formatTimestamp(comment.updatedAt)}
+              articleName={articleName}
+              id={comment._id}
+              onUpdate={handleUpdateComment}
+              onDelete={onDelete}
+            />
+          ))
+      )}
     </div>
   );
 };

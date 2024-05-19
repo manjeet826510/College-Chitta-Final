@@ -1,4 +1,4 @@
-import React, { useContext, useState } from "react";
+import React, { useContext, useEffect, useState } from "react";
 import { Button, Container, Form } from "react-bootstrap";
 import { Store } from "../Store";
 import axios from "axios";
@@ -10,8 +10,26 @@ const ReviewUpload = () => {
     const { state } = useContext(Store);
   const { userInfo } = state;
 
+  const [college, setCollege] = useState('')
+
   const {slug} = useParams();
-  console.log(slug);
+  // console.log(slug);
+
+  useEffect(() => {
+    const fetchCollegeBySlug = async () => {
+      try {
+        const {data} = await axios.get(`api/colleges/${slug}`);
+        // console.log(data);
+        setCollege(data);
+      } catch (error) {
+        console.error('Error fetching college:', error.message);
+        // seterror(error.message)
+      }
+    };
+
+    fetchCollegeBySlug();
+  }, []);
+  
 
   const navigate = useNavigate()
 
@@ -19,6 +37,7 @@ const ReviewUpload = () => {
   const [formData, setFormData] = useState({
 
     // Other fields...
+    deptStream: "", 
     title: "", 
     placements: "", 
     infrastructure: "",
@@ -32,19 +51,19 @@ const ReviewUpload = () => {
   
 
   const saveReviewToDB = async () => {
+    // console.log(formData);
     try {
       
       const { data } = await axios.post(
         "/api/reviews",
         {
+            deptStream: formData.deptStream,
             title: formData.title, 
             placements: formData.placements, 
             infrastructure: formData.infrastructure, 
             faculty: formData.faculty, 
             other: formData.other, 
-            name: userInfo.name,
-            image: userInfo.image,
-            slug: slug,
+            college: college._id,
             verified: false,
             
  
@@ -56,7 +75,7 @@ const ReviewUpload = () => {
         }
       );
       navigate('/');
-      toast.success("Your Review will be uploaded after review");
+      toast.success("Your Review will be uploaded after verification");
       console.log(data);
       // navigate(`/admin/product/${data.product._id}`)
       // console.log("product created");
@@ -67,6 +86,7 @@ const ReviewUpload = () => {
     // ...
     // Reset form data and close the popup
     setFormData({
+      deptStream: "",
       title: "", 
       placements: "", 
       infrastructure: "", 
@@ -93,7 +113,7 @@ const ReviewUpload = () => {
       // navigate(redirect || "/");
     } catch (error) {
       if (error.response && error.response.status === 409) {
-        toast.error("Article already exists.");
+        toast.error("Review already exists.");
       } else {
         toast.error("An unexpected error occurred.");
       }
@@ -112,15 +132,6 @@ const ReviewUpload = () => {
   
 
 
-
-
-
-
-
-  
-
-  
-
   return (
   
     <Container >
@@ -133,6 +144,19 @@ const ReviewUpload = () => {
 
        
 
+        <Form.Group className="mb-3" controlId="name">
+          <Form.Label>Your Department with Stream</Form.Label>
+          <Form.Control
+            required
+            type="text"
+            name="deptStream"
+            // value={formData.title}
+            onChange={handleInputChange}
+            placeholder="B.Tech in Computer Science and Engineering"
+            style={{marginBottom: '1rem'}}
+            
+          />
+        </Form.Group>
         <Form.Group className="mb-3" controlId="name">
           <Form.Label>Title</Form.Label>
           <Form.Control

@@ -17,7 +17,7 @@ const BlogUpload = () => {
   const [formData, setFormData] = useState({
 
     // Other fields...
-    name: "", 
+    slug: "", 
     title: "", 
     content: [""],
     
@@ -48,10 +48,11 @@ const BlogUpload = () => {
       const { data } = await axios.post(
         "/api/blogs",
         {
-            name: formData.name, 
+            slug: formData.slug, 
             title: formData.title, 
             thumbnail: imageUrlFromUpload, 
             content: formData.content,
+            author: userInfo._id,
  
         },
         {
@@ -60,7 +61,7 @@ const BlogUpload = () => {
           },
         }
       );
-      navigate('/admin/dashboard/blog-update');
+      navigate('/admin/articlelist');
       toast.success("Blog uploaded successfully");
       console.log(data);
       // navigate(`/admin/product/${data.product._id}`)
@@ -72,7 +73,7 @@ const BlogUpload = () => {
     // ...
     // Reset form data and close the popup
     setFormData({
-        name: "", 
+        slug: "", 
         title: "", 
         thumbnail: "", 
         content: [""],
@@ -107,10 +108,10 @@ const BlogUpload = () => {
 
 
   const handleInputChange = (e) => {
-    const { name, value } = e.target;
+    const { slug, value } = e.target;
     setFormData({
       ...formData,
-      [name]: value,
+      [slug]: value,
     });
   };
   
@@ -169,12 +170,12 @@ const removeContentField = (index) => {
        
 
         <Form.Group className="mb-3" controlId="name">
-          <Form.Label>Name</Form.Label>
+          <Form.Label>slug</Form.Label>
           <Form.Control
             required
             type="text"
-            name="name"
-            value={formData.name}
+            name="slug"
+            value={formData.slug}
             onChange={handleInputChange}
             placeholder=""
             style={{marginBottom: '1rem'}}
@@ -184,7 +185,7 @@ const removeContentField = (index) => {
        
 
         <Form.Group>
-          <Form.Label>Title</Form.Label>
+          <Form.Label>Article Title</Form.Label>
           <Form.Control
             required
             type="text"

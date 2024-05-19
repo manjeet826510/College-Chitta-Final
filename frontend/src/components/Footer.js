@@ -10,7 +10,7 @@ const Footer = () => {
 
   return (
     <>
-    <div className='footer'>
+    <div className='footer' style={{marginTop: '3rem'}}>
       <Row className='footer-row'>
         <Col className='footer-col' md={3} xs={12}>
           <div>
@@ -40,7 +40,7 @@ const Footer = () => {
           <ul>
             <li><Link to='https://www.instagram.com/hustlewithmaharufh/' target='_blank'>Instagram</Link></li>
             <li><Link to='https://www.facebook.com/maharufh.alimir' target='_blank'>Facebook</Link></li>
-            <li><Link to='https://www.twitter.com/home' target='_blank'>Twitter</Link></li>
+            <li><Link to='https://twitter.com/MaharufhM?s=08' target='_blank'>Twitter</Link></li>
             <li><Link to='https://t.me/MentorRaju' target='_blank'>Telegram</Link></li>
           </ul>
           </div>

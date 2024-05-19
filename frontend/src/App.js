@@ -38,6 +38,7 @@ import ProtectedRoute from './components/ProtectedRoute';
 import ReviewUpload from './screens/ReviewUpload';
 import ReviewListScreen from './screens/ReviewListScreen';
 import UserListScreen from './screens/UserListScreen';
+import ArticleListScreen from './screens/ArticleListScreen';
 
 
 
@@ -48,14 +49,14 @@ const App = () => {
   return (
     <BrowserRouter>
       <>
-      <div className="d-flex flex-column site-container">
+      <div className="d-flex flex-column site-container min-vh-100">
       <ToastContainer position="top-center" limit={1} />
         <NavbarComp/>
-        <main>
+        <main >
           <Routes>
             <Route path='/' element={<HomeScreen/>}/>
             <Route path='/blog' element={<BlogScreen/>}/>
-            <Route path='/article/:name' element={<Article/>}/>
+            <Route path='/article/:slug' element={<Article/>}/>
             <Route path='/signin' element={<SigninScreen/>}/>
             <Route path="/signup" element={<SignupScreen />} />
             <Route path='/about' element={<AboutScreen/>}/>
@@ -104,6 +105,15 @@ const App = () => {
                   </AdminRoute>
                 }
               />
+              <Route
+                path="/admin/college-edit/:id"
+                element={
+                  <AdminRoute>
+                    {" "}
+                    <CollegeEdit />{" "}
+                  </AdminRoute>
+                }
+              />
             <Route
                 path="/admin/college-upload"
                 element={
@@ -114,7 +124,7 @@ const App = () => {
                 }
               />
             <Route
-                path="/admin/dashboard/blog-upload"
+                path="/admin/article-upload"
                 element={
                   <AdminRoute>
                     {" "}
@@ -128,6 +138,15 @@ const App = () => {
                   <AdminRoute>
                     {" "}
                     <CollegeListScreen />{" "}
+                  </AdminRoute>
+                }
+              />
+            <Route
+                path="/admin/articlelist"
+                element={
+                  <AdminRoute>
+                    {" "}
+                    <ArticleListScreen />{" "}
                   </AdminRoute>
                 }
               />
@@ -149,15 +168,7 @@ const App = () => {
                   </AdminRoute>
                 }
               />
-            <Route
-                path="/admin/college-edit/:id"
-                element={
-                  <AdminRoute>
-                    {" "}
-                    <CollegeEdit />{" "}
-                  </AdminRoute>
-                }
-              />
+            
 
             <Route
                 path="/admin/dashboard/blog-update"
@@ -170,7 +181,7 @@ const App = () => {
               />
 
             <Route
-                path="/admin/dashboard/blog-edit/:name"
+                path="/admin/article-edit/:slug"
                 element={
                   <AdminRoute>
                     {" "}

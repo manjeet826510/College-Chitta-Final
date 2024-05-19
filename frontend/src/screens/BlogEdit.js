@@ -28,17 +28,19 @@ const BlogEdit = () => {
     loadingCreate: false,
     error: "",
   });
+  const { slug } = useParams();
 
   const navigate = useNavigate();
 
-  const { name } = useParams();
-  // console.log(id);
+  // console.log(slug);
+
+  // console.log('edit page');
 
   
 
   const [formData, setFormData] = useState({
     // Other fields...
-    name: "", 
+    slug: "", 
     title: "", 
     image: null,
     newImage: null,
@@ -51,13 +53,15 @@ const BlogEdit = () => {
   
 
   useEffect(() => {
+    window.scroll(0, 0)
     const fetchBlog = async () => {
       try {
-        const { data } = await axios.get(`/api/blogs/${name}`);
+        console.log(`slug = ${slug}`);
+        const { data } = await axios.get(`/api/blogs/${slug}`);
         console.log(data);
         setFormData({
           ...formData,
-          name: data.name, 
+          slug: data.slug, 
           title: data.title, 
           image: data.thumbnail,
           newImage: null,
@@ -69,13 +73,13 @@ const BlogEdit = () => {
       } catch (error) {
         // Handle error
         toast.error('blog not found')
-        navigate('/admin/dashboard/blog-update');
+        navigate('/admin/articlelist');
         // console.error('Error fetching college data:', error);
       }
     };
   
     fetchBlog();
-  }, [name]); // Add formData as a dependency if it's needed for further processing
+  }, [slug]); // Add formData as a dependency if it's needed for further processing
 
 
   const handleImageUpload = (e) => {
@@ -111,9 +115,9 @@ const BlogEdit = () => {
       }
 
       const { data } = await axios.put(
-        `/api/blogs/${name}`,
+        `/api/blogs/${slug}`,
         {
-            name: formData.name, 
+            slug: formData.slug, 
             title: formData.title, 
             image: formData.newImage ? formData.Location : formData.image ,
             content: formData.content, 
@@ -128,7 +132,7 @@ const BlogEdit = () => {
         }
       );
       dispatch({ type: "CREATE_SUCCESS" });
-      navigate('/admin/dashboard/blog-update');
+      navigate('/admin/articlelist');
       toast.success("Blog updated successfully");
       // console.log(data);
       // navigate(`/admin/product/${data.product._id}`)
@@ -141,7 +145,7 @@ const BlogEdit = () => {
     // ...
     // Reset form data and close the popup
     setFormData({
-        name: "", 
+      slug: "", 
         title: "", 
         image: null,
         content: [""],
@@ -223,12 +227,12 @@ newContent.splice(index, 1);
        
 
         <Form.Group className="mb-3" controlId="name">
-          <Form.Label>Name</Form.Label>
+          <Form.Label>slug</Form.Label>
           <Form.Control
             required
             type="text"
-            name="name"
-            value={formData.name}
+            name="slug"
+            value={formData.slug}
             onChange={handleInputChange}
             placeholder=""
             style={{marginBottom: '1rem'}}

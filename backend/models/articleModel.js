@@ -2,10 +2,15 @@
 import mongoose from "mongoose";
 
 const articleSchema = mongoose.Schema({
-  name: String,
+  slug: String,
   title: String,
   thumbnail: String,
   content: [String],
+  author: {
+    type: mongoose.Schema.Types.ObjectId,
+    ref: "User",
+    required: true,
+  },
 }
 );
 

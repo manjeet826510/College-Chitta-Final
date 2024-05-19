@@ -2,10 +2,18 @@
 import mongoose from "mongoose";
 
 const commentSchema = mongoose.Schema({
-  author: String,
+  author: {
+    type: mongoose.Schema.Types.ObjectId,
+    ref: "User",
+    required: true,
+  },
   img: String,
   text: String,
-  articleName: String,
+  articleId: {
+    type: mongoose.Schema.Types.ObjectId,
+    ref: "Article",
+    required: true,
+  },
 }, { timestamps: true }); // Adding timestamps to track comment creation/update times
 
 const Comment = mongoose.model('comments', commentSchema);

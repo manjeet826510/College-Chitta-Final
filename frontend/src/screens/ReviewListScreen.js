@@ -44,6 +44,19 @@ const ReviewListScreen = () => {
   const [showModal, setShowModal] = useState(false);
   const [selectedReview, setSelectedReview] = useState(null);
 
+  const [isVisible, setIsVisible] = useState(!document.hidden);
+
+  const handleVisibilityChange = () => {
+    setIsVisible(!document.hidden);
+  };
+
+  useEffect(() => {
+    document.addEventListener('visibilitychange', handleVisibilityChange);
+    return () => {
+      document.removeEventListener('visibilitychange', handleVisibilityChange);
+    };
+  }, []);
+
   
 
   useEffect(() => {
@@ -65,7 +78,7 @@ const ReviewListScreen = () => {
     };
 
     fetchReviews();
-  }, [userInfo]);
+  }, [userInfo, dispatch, isVisible]);
 
   // Function to handle search query change
   const handleSearchChange = (e) => {
@@ -76,7 +89,7 @@ const ReviewListScreen = () => {
   useEffect(() => {
     setFilteredReviews(
       reviews.filter((review) =>
-        review.slug.toLowerCase().includes(searchQuery.toLowerCase())
+        review.college.name.toLowerCase().includes(searchQuery.toLowerCase())
       )
     );
   }, [reviews, searchQuery, ]);
@@ -156,7 +169,7 @@ const ReviewListScreen = () => {
           <h1>Review Verification</h1>
           <Form.Control
             type="text"
-            placeholder="Search by college..."
+            placeholder="Search by college name..."
             value={searchQuery}
             onChange={handleSearchChange}
           />
@@ -187,18 +200,20 @@ const ReviewListScreen = () => {
                 </tr>
               </thead>
               <tbody>
-                {filteredReviews.map((review) => (
+               
+
+                {filteredReviews.sort((a, b) => new Date(b.updatedAt) - new Date(a.updatedAt)).map((review) => (
                   <tr key={review._id}>
                    
                     <td>
                     <img
-                    src={review.image}
+                    src={review.user.image}
                     alt="Profile Picture"
                     className="profile-pic-comment"
                     />
                     {" "}
-                        {review.name}</td>
-                    <td><a href={`/college/${review.slug}`}>{review.slug}</a></td>
+                        {review.user.name}</td>
+                    <td><a href={`/college/${review.college.slug}`}>{review.college.name}</a></td>
                     <td>
                     <Button onClick={() => handleViewReview(review._id)} variant="info">
                     <FaEye />
@@ -237,7 +252,8 @@ const ReviewListScreen = () => {
         <Modal.Body>
           {selectedReview && (
             <div>
-              <h5>Title: {selectedReview.title}</h5>
+              <h5>Department: {selectedReview.deptStream}</h5>
+              <h4>Title: {selectedReview.title}</h4>
               <p><b>Placements:</b> {selectedReview.placements}</p>
               <p><b>Infrastructure:</b> {selectedReview.infrastructure}</p>
               <p><b>Faculty:</b> {selectedReview.faculty}</p>

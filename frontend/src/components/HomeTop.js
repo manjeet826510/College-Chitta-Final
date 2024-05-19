@@ -29,8 +29,8 @@ const HomeTop = () => {
            
             <div className="secondHalf">
               {/* <img src="img.jpg" alt="Laptop Image" className="hometop-logo" /> */}
-              <video className="hometop-logo" autoPlay loop controls={false} muted src="https://videos.pexels.com/video-files/19990812/19990812-uhd_2560_1440_30fps.mp4"></video>
-
+              {/* <video className="hometop-logo" autoPlay loop controls={true} muted src="https://videos.pexels.com/video-files/19990812/19990812-uhd_2560_1440_30fps.mp4"></video> */}
+              <iframe width="560" height="315" src="https://www.youtube.com/embed/MbX63of83B0?si=_77gqgNNGlEPXUbE?rel=0" title="YouTube video player" frameborder="0" allow="" referrerpolicy="" allowfullscreen></iframe>
             </div>
           </Col>
           </Row>

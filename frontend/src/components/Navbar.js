@@ -25,7 +25,7 @@ const NavbarComp = () => {
   };
 
   return (
-    <Navbar className='nav-bar' sticky="top"  bg="dark" variant="dark" expand="lg">
+    <Navbar className='' sticky="top"   bg="dark" variant="dark" expand="lg">
 
             <Container>
               <LinkContainer to="/">
@@ -118,6 +118,9 @@ const NavbarComp = () => {
                       </LinkContainer>
                       <LinkContainer to="/admin/reviewlist">
                         <NavDropdown.Item>Reviews</NavDropdown.Item>
+                      </LinkContainer>
+                      <LinkContainer to="/admin/articlelist">
+                        <NavDropdown.Item>Articles</NavDropdown.Item>
                       </LinkContainer>
                       <LinkContainer to="/admin/userlist">
                         <NavDropdown.Item>Users</NavDropdown.Item>
