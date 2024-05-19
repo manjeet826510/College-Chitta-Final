@@ -432,6 +432,8 @@ background-color: #000;
 
 
 
+
+
 /* Media query for small devices */
 
 
@@ -577,6 +579,11 @@ background-color: #000;
         
         
 @media (max-width: 575px) {
+  .hometop-logo{
+    width: 100%;
+    height: 15rem;
+    /* background-color: aqua; */
+  }
   .college-name-header{
     margin-top: 2rem !important;
   }
