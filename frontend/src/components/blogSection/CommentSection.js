@@ -140,7 +140,7 @@ const CommentSection = ({ articleId, articleName }) => {
   };
 
   const onDelete = async (id) => {
-    if(!window.confirm('Do you really want to delete this review')) 
+    if(!window.confirm('Do you really want to delete this comment')) 
       return;
     try {
       await axios.delete(`/api/comments/${id}`, {
