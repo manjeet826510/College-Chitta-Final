@@ -77,7 +77,7 @@ const CommentCard = ({ author, img, text, timestamp, articleName, id, onUpdate, 
           <Col>
             <Row className="comment-author">
               <Col>{author}</Col>
-              {author === userInfo.name && (
+              {userInfo && author === userInfo.name && (
                 <Col style={{ display: 'flex', justifyContent: 'flex-end' }}>
                   <Button onClick={editComment} variant='light'>
                     <i style={{ color: 'blue' }} className="fas fa-edit"></i>
