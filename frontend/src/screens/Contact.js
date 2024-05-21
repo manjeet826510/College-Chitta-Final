@@ -69,7 +69,7 @@ const Contact = () => {
                         <div className="social-icons">
                             <a href="https://www.instagram.com/hustlewithmaharufh/" target="_blank"><i className="fab fa-instagram fa-2x"></i></a>
                             <a href="https://www.facebook.com/maharufh.alimir" target="_blank"><i className="fab fa-facebook fa-2x"></i></a>
-                            <a href="https://www.twitter.com/home" target="_blank"><i className="fab fa-twitter fa-2x"></i></a>
+                            <a href="https://x.com/MaharufhM?s=08" target="_blank"><i className="fab fa-twitter fa-2x"></i></a>
                             <a href="https://t.me/MentorRaju" target="_blank"><i className="fab fa-telegram fa-2x"></i></a>
                         </div>
                     </Col>

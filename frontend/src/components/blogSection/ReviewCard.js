@@ -117,7 +117,7 @@ const ReviewCard = ({ author, deptStream, img, title, placements, infrastructure
             <Row className="comment-author">
               <Row>
               <Col>{author}</Col>
-              {author === userInfo.name && (
+              {userInfo && author === userInfo.name && (
                 <Col style={{ display: 'flex', justifyContent: 'flex-end' }}>
                   <Button onClick={editReview} variant='light'>
                     <i style={{ color: 'blue' }} className="fas fa-edit"></i>
