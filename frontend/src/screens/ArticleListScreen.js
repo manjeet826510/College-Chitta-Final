@@ -2,11 +2,11 @@ import React, { useContext, useEffect, useReducer, useState } from "react";
 import MessageBox from "../components/MessageBox";
 import axios from "axios";
 import getError from "../utils";
-import Button from "react-bootstrap/esm/Button";
+import Button from "react-bootstrap/Button";
 import { Store } from "../Store";
 import { Helmet } from "react-helmet-async";
-import Row from "react-bootstrap/esm/Row";
-import Col from "react-bootstrap/esm/Col";
+import Row from "react-bootstrap/Row";
+import Col from "react-bootstrap/Col";
 import { Container, Form, Spinner } from "react-bootstrap";
 import { useNavigate } from "react-router-dom";
 import { toast } from "react-toastify";
@@ -28,8 +28,6 @@ const reducer = (state, action) => {
   }
 };
 
-
-
 const ArticleListScreen = () => {
   const [{ loading, error, articles }, dispatch] = useReducer(reducer, {
     loading: false,
@@ -41,7 +39,6 @@ const ArticleListScreen = () => {
 
   const navigate = useNavigate();
 
-  // State variables for search functionality
   const [searchQuery, setSearchQuery] = useState("");
   const [filteredArticles, setFilteredArticles] = useState([]);
 
@@ -54,26 +51,24 @@ const ArticleListScreen = () => {
             authorization: `Bearer ${userInfo.jwtToken}`,
           },
         });
-        console.log(data);
         dispatch({ type: "FETCH_SUCCESS", payload: data });
       } catch (err) {
-        dispatch({ type: "FETCH_FAIL", error: getError(err) });
+        dispatch({ type: "FETCH_FAIL", payload: getError(err) });
       }
     };
 
     fetchArticles();
   }, [userInfo]);
 
-  // Function to handle search query change
   const handleSearchChange = (e) => {
     setSearchQuery(e.target.value);
   };
 
-  // Filter colleges based on search query
   useEffect(() => {
     setFilteredArticles(
       articles.filter((article) =>
-        article.slug.toLowerCase().includes(searchQuery.toLowerCase()) || article.author.name.toLowerCase().includes(searchQuery.toLowerCase()) 
+        (article.slug && article.slug.toLowerCase().includes(searchQuery.toLowerCase())) || 
+        (article.author && article.author.name && article.author.name.toLowerCase().includes(searchQuery.toLowerCase()))
       )
     );
   }, [articles, searchQuery]);
@@ -83,39 +78,29 @@ const ArticleListScreen = () => {
   };
 
   const handleDeleteArticle = (aid) => {
-    const res = window.confirm("Do you really want to delete this Article ?");
-    if(res){
-        handleDeleteSubmit(aid);
+    const res = window.confirm("Do you really want to delete this Article?");
+    if (res) {
+      handleDeleteSubmit(aid);
     }
   };
 
-  const handleDeleteSubmit = async(aid) => {
-
+  const handleDeleteSubmit = async (aid) => {
     try {
-        const {data} = await axios.delete(
-            `/api/blogs/${aid}`,
-            {
-                headers: {
-                    authorization: `Bearer ${userInfo.jwtToken}`
-                }
-            }
-        )
-        window.location.reload(); // Refresh the page
-        toast.success("Article deleted successfully");
-        // console.log(data);
-        // console.log("product created");
+      await axios.delete(`/api/blogs/${aid}`, {
+        headers: {
+          authorization: `Bearer ${userInfo.jwtToken}`,
+        },
+      });
+      window.location.reload(); // Refresh the page
+      toast.success("Article deleted successfully");
     } catch (err) {
-        toast.error(getError(err));
+      toast.error(getError(err));
     }
-    // Handle form submission and data saving here
-    // ...
-   
-
   };
 
-  const handleUploadArticle = ()=>[
-    navigate('/admin/article-upload')
-  ]
+  const handleUploadArticle = () => {
+    navigate('/admin/article-upload');
+  };
 
   return (
     <Container>
@@ -126,7 +111,6 @@ const ArticleListScreen = () => {
       <Row>
         <Col>
           <h1>Articles</h1>
-          {/* Search bar */}
           <Button onClick={handleUploadArticle} className="mt-1 mb-3">Upload Article</Button>
           <Form.Control
             type="text"
@@ -146,41 +130,52 @@ const ArticleListScreen = () => {
       ) : error ? (
         <MessageBox variant="danger">{error}</MessageBox>
       ) : (
-        <>
-          <div className="table-responsive">
-            <table className="table">
-              <thead>
-                <tr>
-                  <th>ID</th>
-                  <th>NAME</th>
-                  <th>AUTHOR</th>
-                  <th>ACTIONS</th>
+        <div className="table-responsive">
+          <table className="table">
+            <thead>
+              <tr>
+                <th>ID</th>
+                <th>NAME</th>
+                <th>AUTHOR</th>
+                <th>ACTIONS</th>
+              </tr>
+            </thead>
+            <tbody>
+              {filteredArticles.map((article) => (
+                <tr key={article?._id}>
+                  <td>{article?._id}</td>
+                  <td>
+                    <a href={`/article/${article?.slug}`}>{article?.slug}</a>
+                  </td>
+                  <td>{article?.author?.name}</td>
+                  <td>
+                    {userInfo && userInfo._id === article?.author?._id ? (
+                      <>
+                        <Button onClick={() => handleEditArticle(article.slug)} variant="success">
+                          <i className="fas fa-edit"></i>
+                        </Button>
+                        {"    "}
+                        <Button onClick={() => handleDeleteArticle(article._id)} variant="danger">
+                          <i className="fas fa-trash"></i>
+                        </Button>
+                      </>
+                    ) : (
+                      <>
+                        <Button disabled onClick={() => handleEditArticle(article.slug)} variant="success">
+                          <i className="fas fa-edit"></i>
+                        </Button>
+                        {"    "}
+                        <Button disabled onClick={() => handleDeleteArticle(article._id)} variant="danger">
+                          <i className="fas fa-trash"></i>
+                        </Button>
+                      </>
+                    )}
+                  </td>
                 </tr>
-              </thead>
-              <tbody>
-                {filteredArticles.map((article) => (
-                  <tr key={article._id}>
-                    <td>{article._id}</td>
-                    <td><a href={`/article/${article.slug}`}>{article.slug}</a></td>
-                    <td>{article.author.name}</td>
-                      {userInfo._id === article.author._id ?
-                    <td>
-                      <Button onClick={() => handleEditArticle(article.slug)} variant="success"><i class="fas fa-edit" ></i></Button>
-                      {"    "}
-                      <Button onClick={() => handleDeleteArticle(article._id)} variant="danger"><i class="fas fa-trash" ></i></Button>
-                    </td> :
-                    <td>
-                      <Button disabled onClick={() => handleEditArticle(article.slug)} variant="success"><i class="fas fa-edit" ></i></Button>
-                      {"    "}
-                      <Button disabled onClick={() => handleDeleteArticle(article._id)} variant="danger"><i class="fas fa-trash" ></i></Button>
-                    </td>
-                      } 
-                  </tr>
-                ))}
-              </tbody>
-            </table>
-          </div>
-        </>
+              ))}
+            </tbody>
+          </table>
+        </div>
       )}
     </Container>
   );
