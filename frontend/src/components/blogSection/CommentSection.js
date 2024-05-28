@@ -72,7 +72,7 @@ const CommentSection = ({ articleId, articleName }) => {
       toast.success('Comment added successfully');
       setComment('');
       setCommentHeight('auto');
-      setComments([data, ...comments]); // Add the new comment to the top of the list
+      setComments([data, ...comments]);
     } catch (err) {
       toast.error(getError(err));
     }
@@ -80,6 +80,10 @@ const CommentSection = ({ articleId, articleName }) => {
 
   const handleSubmit = async (e) => {
     e.preventDefault();
+    if (!userInfo) {
+      navigate(`/signin?redirect=/article/${articleName}`);
+      return;
+    }
     try {
       await saveCommentToDB();
     } catch (error) {
@@ -96,14 +100,13 @@ const CommentSection = ({ articleId, articleName }) => {
     const fetchComments = async () => {
       try {
         dispatch({ type: "FETCH_REQUEST" });
-        // console.log(`/api/comments/${articleId}`);
         const { data } = await axios.get(`/api/comments/${articleId}`);
         if (isMounted) {
           setComments(data);
           dispatch({ type: "FETCH_SUCCESS" });
         }
       } catch (error) {
-        dispatch({ type: "FETCH_FAIL" });
+        dispatch({ type: "FETCH_FAIL", payload: getError(error) });
       }
     };
 
@@ -113,12 +116,9 @@ const CommentSection = ({ articleId, articleName }) => {
       isMounted = false;
       setComments([]);
     };
-  }, [isVisible, articleName,articleId, userInfo, commentHeight]);
+  }, [isVisible, articleName, articleId, userInfo, commentHeight]);
 
   const handleChange = (event) => {
-    if (!userInfo) {
-      navigate(`/signin?redirect=/article/${articleName}`);
-    }
     setComment(event.target.value);
     autoResizeTextarea(event.target);
   };
@@ -134,13 +134,13 @@ const CommentSection = ({ articleId, articleName }) => {
       const updatedComments = prevComments.map((comment) =>
         comment._id === id ? { ...comment, text: newText, updatedAt: new Date().toISOString() } : comment
       );
-      toast.success('Comment updated successfully')
+      toast.success('Comment updated successfully');
       return updatedComments.sort((a, b) => new Date(b.updatedAt) - new Date(a.updatedAt));
     });
   };
 
   const onDelete = async (id) => {
-    if(!window.confirm('Do you really want to delete this comment')) 
+    if (!window.confirm('Do you really want to delete this comment?')) 
       return;
     try {
       await axios.delete(`/api/comments/${id}`, {
@@ -154,7 +154,6 @@ const CommentSection = ({ articleId, articleName }) => {
       toast.error(getError(err));
     }
   };
-  
 
   return (
     <div>
@@ -188,11 +187,11 @@ const CommentSection = ({ articleId, articleName }) => {
         <div>No comments found</div>
       ) : (
         comments
-          .sort((a, b) => new Date(b.updatedAt) - new Date(a.updatedAt)) // Sort comments by updatedAt in descending order
+          .sort((a, b) => new Date(b.updatedAt) - new Date(a.updatedAt))
           .map((comment) => (
             <CommentCard
               key={comment._id}
-              author={comment.author.name}
+              author={comment.author ? comment.author.name : 'Anonymous'}
               img={comment.img}
               text={comment.text}
               timestamp={formatTimestamp(comment.updatedAt)}
