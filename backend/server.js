@@ -11,6 +11,9 @@ import collegeRouter from "./routes/collegeRoutes.js";
 import articleRouter from "./routes/articleRoutes.js";
 import commentRouter from "./routes/commentRoutes.js";
 import reviewRouter from "./routes/reviewRoutes.js";
+import counsellorRouter from "./routes/counsellorRouter.js";
+import bookingRouter from "./routes/bookingRoutes.js";
+import payRouter from "./routes/payRoutes.js";
 
 
 dotenv.config();
@@ -31,14 +34,24 @@ app.use(express.json());
 
 app.use(express.urlencoded({ extended: true }));
 
+app.get(`/api/rzp/razorpay-key`, (req, res) => {
+  const razorpayKey = process.env.REACT_APP_RAZORPAY_KEY_ID;
+  res.json({ razorpayKey });
+});
+
 app.use(`/api/colleges`, collegeRouter);
 app.use(`/api/blogs`, articleRouter);
 app.use(`/api/comments`, commentRouter);
 app.use(`/api/reviews`, reviewRouter);
 app.use(`/api/contact`, contactRouter);
 app.use(`/api/users`, userRouter);
+app.use(`/api/counsellors`, counsellorRouter);
 app.use(`/api/upload`, uploadRouter);
 app.use(`/api/contact`, contactRouter);
+app.use(`/api/bookings`, bookingRouter);
+app.use(`/api/create`, payRouter);
+
+
 
 
 

@@ -15,20 +15,37 @@ const ReviewUpload = () => {
   const {slug} = useParams();
   // console.log(slug);
 
-  useEffect(() => {
-    const fetchCollegeBySlug = async () => {
-      try {
-        const {data} = await axios.get(`api/colleges/${slug}`);
-        // console.log(data);
-        setCollege(data);
-      } catch (error) {
-        console.error('Error fetching college:', error.message);
-        // seterror(error.message)
-      }
-    };
+  const fetchCollegeBySlug = async () => {
+    try {
+      const {data} = await axios.get(`api/colleges/${slug}`);
+      console.log(data);
+      setCollege(data);
+    } catch (error) {
+      console.error('Error fetching college:', error.message);
+      // seterror(error.message)
+    }
+  };
 
-    fetchCollegeBySlug();
-  }, []);
+  // useEffect(() => {
+  //   const fetchCollegeBySlug = async () => {
+  //     try {
+  //       const {data} = await axios.get(`api/colleges/${slug}`);
+  //       console.log(data);
+  //       setCollege(data);
+  //     } catch (error) {
+  //       console.error('Error fetching college:', error.message);
+  //       // seterror(error.message)
+  //     }
+  //   };
+
+  //   fetchCollegeBySlug();
+  // }, [slug]);
+
+  useEffect(() => {
+    if (slug) {
+      fetchCollegeBySlug();
+    }
+  }, [slug]);
   
 
   const navigate = useNavigate()

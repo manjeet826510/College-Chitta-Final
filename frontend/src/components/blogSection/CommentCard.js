@@ -65,7 +65,7 @@ const CommentCard = ({ author, img, text, timestamp, articleName, id, onUpdate, 
 
   return (
     <div>
-      <Card className="comment-card">
+      <Card className="comment-card card">
         <Row>
           <Col style={{ display: 'flex', justifyContent: 'center', alignItems: 'flex-start' }} xs={3} md={1}>
             <img

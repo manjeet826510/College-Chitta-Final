@@ -1,10 +1,15 @@
-import React from 'react';
+import React, { useEffect } from 'react';
 import { Container, Row, Col, Card } from 'react-bootstrap';
 import { FaUniversity, FaGraduationCap, FaComments, FaBook } from 'react-icons/fa';
 import '../index.css'
 import { Helmet } from 'react-helmet-async';
 
 const ServiceScreen = () => {
+  useEffect(() => {
+    window.scrollTo(0, 0); // Scroll to the top when component mounts
+
+    
+  }, []);
   return (
     <Container className="mt-5">
       <Helmet>

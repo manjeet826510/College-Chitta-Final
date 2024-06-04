@@ -11,6 +11,10 @@ const Footer = () => {
   return (
     <>
     <div className='footer' style={{marginTop: '3rem'}}>
+      <hr/>
+      <br/>
+      <br/>
+      <br/>
       <Row className='footer-row'>
         <Col className='footer-col' md={3} xs={12}>
           <div>

@@ -108,10 +108,10 @@ const BlogUpload = () => {
 
 
   const handleInputChange = (e) => {
-    const { slug, value } = e.target;
+    const { name, value } = e.target;
     setFormData({
       ...formData,
-      [slug]: value,
+      [name]: value,
     });
   };
   
