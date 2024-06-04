@@ -5,18 +5,7 @@ import College from "../models/collegeModel.js";
 
 const collegeRouter = express.Router();
 
-collegeRouter.get("/:slug",
-  expressAsyncHandler(async (req, res) => {
-    // console.log("hit");
-    // console.log(req.params);
-    const college = await College.findOne({ slug: req.params.slug });
-    if (college) {
-      res.send(college);
-    } else {
-      res.status(404).send({ message: "College Not Found" });
-    }
-  })
-);
+
 
 collegeRouter.get("/", async (req, res) => {
 
@@ -31,6 +20,7 @@ collegeRouter.get("/", async (req, res) => {
 
 });
 
+
 collegeRouter.get("/admin", isAuth, isAdmin, async (req, res) => {
   // console.log('admin route hitted');
    
@@ -40,6 +30,18 @@ collegeRouter.get("/admin", isAuth, isAdmin, async (req, res) => {
  
   res.send({ colleges });
 });
+collegeRouter.get("/:slug",
+  expressAsyncHandler(async (req, res) => {
+    // console.log("hit");
+    // console.log(req.params);
+    const college = await College.findOne({ slug: req.params.slug });
+    if (college) {
+      res.send(college);
+    } else {
+      res.status(404).send({ message: "College Not Found" });
+    }
+  })
+);
 
 collegeRouter.get("/:id",
 expressAsyncHandler(async (req, res) => {
