@@ -19,10 +19,10 @@ articleRouter.get("/", async (req, res) => {
 
 articleRouter.get("/:slug",
   expressAsyncHandler(async (req, res) => {
-    console.log(req.params );
+    // console.log(req.params );
     const blog = await Article.findOne({ slug: req.params.slug }).populate("author", "name");
     if (blog) {
-      console.log(blog);
+      // console.log(blog);
       res.send(blog);
     } else {
       res.status(404).send({ message: "Blog Not Found" });

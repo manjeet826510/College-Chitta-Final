@@ -38,6 +38,7 @@ const CollegeListScreen = () => {
   });
   const { state } = useContext(Store);
   const { userInfo } = state;
+  // console.log(userInfo);
 
   const navigate = useNavigate();
 
@@ -78,7 +79,8 @@ const CollegeListScreen = () => {
   }, [colleges, searchQuery]);
 
   const handleEditCollege = (cid) => {
-    navigate(`/admin/college-edit/${cid}`);
+    if(userInfo && userInfo.isAdmin) navigate(`/admin/college-edit/${cid}`);
+    if(userInfo && userInfo.isCounsellor) navigate(`/counsellor/college-edit/${cid}`);
   };
 
   const handleDeleteCollege = (cid) => {
@@ -112,9 +114,12 @@ const CollegeListScreen = () => {
 
   };
 
-  const handleUploadCollege = ()=>[
-    navigate('/admin/college-upload')
-  ]
+  const handleUploadCollege = ()=>{
+    console.log(userInfo);
+    if(userInfo && userInfo.isAdmin ) navigate('/admin/college-upload');
+    else if(userInfo && userInfo.isCounsellor ) navigate('/counsellor/college-upload');
+  }
+  
 
   return (
     <Container>

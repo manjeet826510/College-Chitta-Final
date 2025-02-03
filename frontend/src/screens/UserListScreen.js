@@ -7,9 +7,8 @@ import { Store } from "../Store";
 import { Helmet } from "react-helmet-async";
 import Row from "react-bootstrap/esm/Row";
 import Col from "react-bootstrap/esm/Col";
-import { Container, Form, Spinner } from "react-bootstrap";
+import { ButtonGroup, Container, Dropdown, Form, Spinner } from "react-bootstrap";
 import { toast } from "react-toastify";
-import { FaCheck, FaEye, FaQuestion } from "react-icons/fa"; // Importing icons from Font Awesome
 
 const reducer = (state, action) => {
   switch (action.type) {
@@ -28,44 +27,6 @@ const reducer = (state, action) => {
   }
 };
 
-// Import the AdminToggle component
-const AdminToggle = ({ isAdmin, userId, userInfo, user }) => {
-  const [isAdminUser, setIsAdminUser] = useState(isAdmin);
-
-  const handleToggleChange = async () => {
-    try {
-      // Toggle the isAdminUser state
-      setIsAdminUser(!isAdminUser);
-
-      // Update user's admin status in the database
-      await axios.put(`/api/users/admin/${userId}`, { isAdmin: !isAdminUser }, {
-        headers: {
-          authorization: `Bearer ${userInfo.jwtToken}`,
-        },
-      });
-
-      toast.success(`${user.name} is now ${isAdminUser ? 'normal' : 'admin'} user`);
-    } catch (error) {
-      toast.error(getError(error));
-      // Reset the toggle state if the request fails
-      setIsAdminUser(isAdmin);
-    }
-  };
-
-  return (
-    <Form.Check
-      type="switch"
-      id={`admin-toggle-${userId}`}
-      label={isAdminUser ? 'Admin' : 'Normal'}
-      checked={isAdminUser}
-      onChange={handleToggleChange}
-      disabled={userInfo.email === user.email} 
-    />
-  );
-};
-
-
-
 const UserListScreen = () => {
   const [{ loading, error, users }, dispatch] = useReducer(reducer, {
     loading: false,
@@ -78,8 +39,6 @@ const UserListScreen = () => {
   const [searchQuery, setSearchQuery] = useState("");
   const [filteredUsers, setFilteredUsers] = useState([]);
 
-  
-
   useEffect(() => {
     const fetchUsers = async () => {
       dispatch({ type: "FETCH_REQUEST" });
@@ -87,12 +46,9 @@ const UserListScreen = () => {
         const { data } = await axios.get("/api/users/admin", {
           headers: {
             authorization: `Bearer ${userInfo.jwtToken}`,
-
           },
         });
-        console.log(data);
         dispatch({ type: "FETCH_SUCCESS", payload: data });
-        console.log(users);
       } catch (err) {
         dispatch({ type: "FETCH_FAIL", error: getError(err) });
       }
@@ -101,49 +57,64 @@ const UserListScreen = () => {
     fetchUsers();
   }, [userInfo]);
 
-  // Function to handle search query change
+  useEffect(() => {
+    if (users.length > 0) {
+      setFilteredUsers(
+        users.filter((user) =>
+          user.name.toLowerCase().includes(searchQuery.toLowerCase())
+        )
+      );
+    }
+  }, [users, searchQuery]);
+
   const handleSearchChange = (e) => {
     setSearchQuery(e.target.value);
   };
 
-  // Filter colleges based on search query
-  // Filter users based on search query
-useEffect(() => {
-  if (users.length > 0) {
-    setFilteredUsers(
-      users.filter((user) =>
-        user.name.toLowerCase().includes(searchQuery.toLowerCase())
-      )
-    );
-  }
-}, [users, searchQuery]);
-
-const handleDeleteUser = (uid) => {
-  const res = window.confirm("Do you really want to delete this user ?");
-  if(res){
+  const handleDeleteUser = (uid) => {
+    const res = window.confirm("Do you really want to delete this user?");
+    if (res) {
       handleDeleteSubmit(uid);
-  }
-};
+    }
+  };
 
-const handleDeleteSubmit = async (userId) => {
+  const handleDeleteSubmit = async (userId) => {
+    try {
+      await axios.delete(`/api/users/admin/verify/${userId}`, {
+        headers: {
+          authorization: `Bearer ${userInfo.jwtToken}`,
+        },
+      });
+      toast.success("User deleted successfully");
+      setTimeout(() => {
+        window.location.reload();
+      }, 1000);
+    } catch (err) {
+      toast.error(getError(err));
+    }
+  };
 
-  try {
-    await axios.delete(`/api/users/admin/verify/${userId}`, {
-      headers: {
-        authorization: `Bearer ${userInfo.jwtToken}`,
-      },
-    });
-    toast.success("User deleted successfully");
-    setTimeout(() => {
-      window.location.reload();
-    }, 1000);
-    // Update state or reload reviews
-  } catch (err) {
-    toast.error(getError(err));
-  }
-};
-
- 
+  const handleRoleChange = async (userId, newRole) => {
+    try {
+      await axios.put(
+        `/api/users/admin/role/${userId}`,
+        { role: newRole },
+        {
+          headers: {
+            authorization: `Bearer ${userInfo.jwtToken}`,
+          },
+        }
+      );
+      toast.success("Role updated successfully");
+      setFilteredUsers((prevUsers) =>
+        prevUsers.map((user) =>
+          user._id === userId ? { ...user, role: newRole } : user
+        )
+      );
+    } catch (error) {
+      toast.error(getError(error));
+    }
+  };
 
   return (
     <Container>
@@ -179,38 +150,59 @@ const handleDeleteSubmit = async (userId) => {
                 <tr>
                   <th>User</th>
                   <th>Email</th>
-                  <th>Admin</th>
+                  <th>Applied Role</th>
+                  <th>Current Role</th>
+                  <th>Document</th>
                   <th>Delete User</th>
                 </tr>
               </thead>
               <tbody>
-              {filteredUsers.map((user) => (
-  <tr key={user._id}>
-    <td>
-      <img
-        src={user.image}
-        alt="Profile Picture"
-        className="profile-pic-comment"
-      />
-      {" "}
-      {user.name}
-    </td>
-    <td>
-      {user.email}
-    </td>
-    <td>
-      {/* Render the AdminToggle component */}
-      
-      <AdminToggle isAdmin={user.isAdmin} userId={user._id} userInfo={userInfo} user={user} />
-    </td>
-    <td>
-      <Button disabled={userInfo.email === user.email}  variant="danger" onClick={()=> handleDeleteUser(user._id)}>
-      <i class="fas fa-trash"></i>
-      </Button>
-    </td>
-  </tr>
-))}
-
+                {filteredUsers.map((user) => (
+                  <tr key={user._id}>
+                    <td>
+                      <img
+                        src={user.image}
+                        alt="Profile Picture"
+                        className="profile-pic-comment"
+                      />
+                      {" "}
+                      {user.name}
+                    </td>
+                    <td>{user.email}</td>
+                    <td>{user.appliedRole}</td>
+                    <td>
+                      <Dropdown
+                        as={ButtonGroup}
+                        onSelect={(eventKey) => handleRoleChange(user._id, eventKey)}
+                      >
+                        <span variant="">{user.role}</span>
+                        {
+                          userInfo.email!==user.email && <Dropdown.Toggle split variant="" id="dropdown-split-basic" />
+                        }
+                        
+                        <Dropdown.Menu>
+                          <Dropdown.Item eventKey="student">Student</Dropdown.Item>
+                          <Dropdown.Item eventKey="counsellor">Counsellor</Dropdown.Item>
+                          <Dropdown.Item eventKey="admin">Admin</Dropdown.Item>
+                        </Dropdown.Menu>
+                      </Dropdown>
+                    </td>
+                    <td>
+                      <a href={user.pdf} target="_blank" rel="noopener noreferrer">
+                        View
+                      </a>
+                    </td>
+                    <td>
+                      <Button
+                        disabled={userInfo.email === user.email}
+                        variant="danger"
+                        onClick={() => handleDeleteUser(user._id)}
+                      >
+                        <i className="fas fa-trash"></i>
+                      </Button>
+                    </td>
+                  </tr>
+                ))}
               </tbody>
             </table>
           </div>

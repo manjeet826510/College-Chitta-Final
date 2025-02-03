@@ -1,9 +1,6 @@
 import express from "express";
-// const multer = require("multer");
 import multer from "multer";
-// const { S3Client, PutObjectCommand } = require("@aws-sdk/client-s3");
 import { S3Client, PutObjectCommand } from "@aws-sdk/client-s3";
-// require("dotenv").config();
 import dotenv from "dotenv";
 
 dotenv.config();
@@ -26,7 +23,8 @@ const upload = multer({
       file.mimetype === "image/jpeg" ||
       file.mimetype === "image/jpg" ||
       file.mimetype === "image/png" ||
-      file.mimetype === "image/webp" 
+      file.mimetype === "image/webp" ||
+      file.mimetype === "application/pdf" // Allow PDF files
     ) {
       done(null, true);
     } else {
@@ -36,32 +34,51 @@ const upload = multer({
 });
 
 // Upload to S3 bucket
-const uploadToS3 = async (fileData) => {
+const uploadToS3 = async (fileData, type) => {
   const params = {
     Bucket: process.env.bucket,
-    Key: `${Date.now().toString()}.jpg`,
+    Key: type === 'image' ? `${Date.now().toString()}.jpg` : `${Date.now().toString()}.pdf`,
     Body: fileData,
+    ContentType: type === 'image' ? 'image/jpeg' : 'application/pdf', // Set Content-Type based on file type
   };
 
   const command = new PutObjectCommand(params);
 
   try {
     const data = await client.send(command);
-    const imageUrl = `https://${params.Bucket}.s3.amazonaws.com/${params.Key}`;
-    return { data, imageUrl };
+    const Url = `https://${params.Bucket}.s3.amazonaws.com/${params.Key}`;
+    return { data, Url };
   } catch (error) {
     console.log(`error = ${error}`);
     throw error;
   }
 };
 
-uploadRouter.post("/", upload.single("image"), async (req, res) => {
-  console.log(req.file);
+uploadRouter.post("/pdf", upload.single('pdf'), async (req, res) => {
+  // console.log(req.file);
+
+  // console.log("pdf route hitted");
+  // console.log(req.file);
 
   if (req.file) {
     try {
-      const { imageUrl } = await uploadToS3(req.file.buffer);
-      res.json({ imageUrl });
+      const { Url } = await uploadToS3(req.file.buffer, 'pdf');
+      res.json({ Url });
+    } catch (error) {
+      res.status(500).json({ error: "Failed to upload pdf to S3" });
+    }
+  } else {
+    res.status(400).json({ error: "No pdf file provided" });
+  }
+});
+
+uploadRouter.post("/", upload.single("image"), async (req, res) => {
+  // console.log(req.file);
+
+  if (req.file) {
+    try {
+      const { Url } = await uploadToS3(req.file.buffer, 'image');
+      res.json({ Url });
     } catch (error) {
       res.status(500).json({ error: "Failed to upload image to S3" });
     }

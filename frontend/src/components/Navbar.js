@@ -13,6 +13,7 @@ import { Store } from '../Store';
 const NavbarComp = () => {
   const { state, dispatch: ctxDispatch } = useContext(Store);
   const {  userInfo } = state;
+  
 
  
 
@@ -52,9 +53,6 @@ const NavbarComp = () => {
                   <Link to="/" className="nav-link">
                     Home
                   </Link>
-                  <Link to="/blog" className="nav-link">
-                    Blog
-                  </Link>
                   <Link to="/about" className="nav-link">
                     About
                   </Link>
@@ -69,22 +67,36 @@ const NavbarComp = () => {
                 </Nav>
 
                 </Navbar.Collapse>
+
                 <SearchBox/>
+
                 <Navbar.Collapse>
                 <Nav className="me-auto w-100 justify-content-end right-nav">
 
                   <Link to="/admission" className="nav-link">
                     Admission
                   </Link>
-                  <Link to="/counselling" className="nav-link">
-                    Counselling
-                  </Link>
+                  
+                  <NavDropdown  title='Counselling'  id="basic-nav-dropdown">
+                      <LinkContainer to="/counselling/free">
+                        <NavDropdown.Item>Free</NavDropdown.Item>
+                      </LinkContainer>
+                      <LinkContainer to="/counselling/paid">
+                        <NavDropdown.Item>Paid</NavDropdown.Item>
+                      </LinkContainer>
+  
+                    
+                    </NavDropdown>
+                  
 
                   
                   {userInfo ? (
                     <NavDropdown  title={<img src={userInfo.image } className='profile-pic'alt="Profile" />}  id="basic-nav-dropdown">
                       <LinkContainer to="/profile">
                         <NavDropdown.Item>User Profile</NavDropdown.Item>
+                      </LinkContainer>
+                      <LinkContainer to="/appointments">
+                        <NavDropdown.Item>Bookings</NavDropdown.Item>
                       </LinkContainer>
   
                       <Link
@@ -113,6 +125,9 @@ const NavbarComp = () => {
                       <LinkContainer to="/admin/dashboard">
                         <NavDropdown.Item>Dashboard</NavDropdown.Item>
                       </LinkContainer>
+                      <LinkContainer to="/admin/appointmentslist">
+                        <NavDropdown.Item>Appointments</NavDropdown.Item>
+                      </LinkContainer>
                       <LinkContainer to="/admin/collegelist">
                         <NavDropdown.Item>Colleges</NavDropdown.Item>
                       </LinkContainer>
@@ -129,6 +144,27 @@ const NavbarComp = () => {
                   )}
 
                   {/* admin ends here*/}
+
+
+                  {/*counsellor starts here */}
+
+                  {userInfo && userInfo.isCounsellor && (
+                    <NavDropdown title="Counsellor" id="counsellor-nav-dropdown">
+                      <LinkContainer to="/counsellor/dashboard">
+                        <NavDropdown.Item>Dashboard</NavDropdown.Item>
+                      </LinkContainer>
+                      <LinkContainer to="/counsellor/appointmentslist">
+                        <NavDropdown.Item>Appointments</NavDropdown.Item>
+                      </LinkContainer>
+                      
+                      <LinkContainer to="/counsellor/collegelist">
+                        <NavDropdown.Item>Colleges</NavDropdown.Item>
+                      </LinkContainer>
+                      
+                    </NavDropdown>
+                  )}
+
+                  {/* counsellor ends here*/}
 
                 
                  

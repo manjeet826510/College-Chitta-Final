@@ -12,6 +12,7 @@ export const generateToken = (user) => {
       name: user.name,
       email: user.email,
       isAdmin: user.isAdmin,
+      isCounsellor: user.isCounsellor,
     },
     //signing payload object
     process.env.JWT_SECRET,
@@ -48,8 +49,8 @@ export const isAuth = (req, res, next) => {
 };
 
 export const isAdmin = (req, res, next)=>{
-  // console.log("checking isAdmin");
-  if(req.user && req.user.isAdmin){
+  // console.log(req.user);
+  if((req.user && req.user.isAdmin) || (req.user && req.user.isCounsellor)){
     next();
   }
   else{

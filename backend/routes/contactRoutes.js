@@ -40,7 +40,7 @@ contactRouter.post('/', (req, res) => {
           console.error('Error sending email:', error);
           res.status(500).send('Error sending email');
       } else {
-          console.log('Email sent:', info.response);
+          // console.log('Email sent:', info.response);
           res.status(200).send('Email sent successfully');
       }
   });
@@ -49,7 +49,7 @@ contactRouter.post('/', (req, res) => {
 
 contactRouter.post("/save-details",
   expressAsyncHandler(async (req, res) => {
-    console.log(req.body);
+    // console.log(req.body);
     const newContact = new Contact({
       name: req.body.name,
       phone: req.body.phone,

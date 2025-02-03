@@ -31,12 +31,18 @@ const SigninScreen = () => {
         email: email,
         password: password,
       });
+      // console.log(data);
       ctxDispatch({ type: "USER_SIGNIN", payload: data });
       // console.log(state);
       localStorage.setItem("userInfo", JSON.stringify(data));
       navigate(redirect || "/");
       // console.log(data);
     } catch (err) {
+      if(err.response.status==500){
+        toast.error('Internal server error or no Internet')
+        return;
+      }
+      console.log(err);
       toast.error(getError(err));
     }
   };

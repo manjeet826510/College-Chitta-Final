@@ -3,21 +3,20 @@ import MessageBox from "../components/MessageBox";
 import Row from "react-bootstrap/esm/Row";
 import Col from "react-bootstrap/esm/Col";
 import Card from "react-bootstrap/esm/Card";
-import { Chart } from "react-google-charts";
 import { Store } from "../Store";
 import getError from "../utils";
-import { Button, Spinner } from "react-bootstrap";
-import { useNavigate } from "react-router-dom";
+import { Spinner } from "react-bootstrap";
 import axios from "axios";
 import { Helmet } from "react-helmet-async";
-
+import SalesScreenAdmin from "./SalesScreenAdmin";
+import SalesScreenCounsellor from "./SalesScreenCounsellor";
 
 const reducer = (state, action) => {
   switch (action.type) {
     case "FETCH_REQUEST":
       return { ...state, loading: true };
     case "FETCH_SUCCESS":
-      return { ...state, summary: action.payload, loading: false };
+      return { ...state, bookings: action.payload, loading: false };
     case "FETCH_FAIL":
       return { ...state, loading: false, error: action.payload };
     default:
@@ -26,21 +25,20 @@ const reducer = (state, action) => {
 };
 
 const DashboardScreen = () => {
-  const [{ loading, error, summary }, dispatch] = useReducer(reducer, {
-    loading: false,
+  const [{ loading, error, bookings }, dispatch] = useReducer(reducer, {
+    loading: true,
     error: "",
+    bookings: [],
   });
+
+  const [counsellorId, setCounsellorId] = useState('');
+  const { state } = useContext(Store);
+  const { userInfo } = state;
 
   const [users, setUsers] = useState([]);
   const [colleges, setColleges] = useState([]);
   const [blogs, setBlogs] = useState([]);
   const [reviews, setReviews] = useState([]);
-
-  const navigate = useNavigate();
-
- 
-  const { state } = useContext(Store);
-  const { userInfo } = state;
 
   useEffect(() => {
     const fetchUsers = async () => {
@@ -83,47 +81,80 @@ const DashboardScreen = () => {
       }
     };
 
+    
+
+    
+
     fetchUsers();
     fetchColleges();
     fetchBlogs();
     fetchReviews();
+    
   }, []);
 
-  
- 
-  
+  useEffect(() => {
+    const fetchData = async () => {
+      try {
+        dispatch({ type: "FETCH_REQUEST" });
+        const { data } = await axios.get("/api/bookings/details", {
+          headers: {
+            authorization: `Bearer ${userInfo.jwtToken}`,
+          },
+        });
+        dispatch({ type: "FETCH_SUCCESS", payload: data });
+        
+        const counsellorId = await getCounsellorId(userInfo._id);
+        setCounsellorId(counsellorId);
+      } catch (error) {
+        dispatch({ type: "FETCH_FAIL", payload: getError(error) });
+      }
+    };
 
-  
+    fetchData();
+  }, [userInfo]);
 
-  const handleUploadCollege = () => {
-    navigate('/admin/dashboard/college-upload');
+  const getCounsellorId = async (id) => {
+    try {
+      const { data } = await axios.get(`/api/counsellors/${id}`, {
+        headers: {
+          authorization: `Bearer ${userInfo.jwtToken}`,
+        },
+      });
+      return data._id;
+    } catch (err) {
+      console.log(getError(err));
+      return null;
+    }
   };
-  const handleUploadBlog = () => {
-    navigate('/admin/dashboard/blog-upload');
-  };
-  const handleUpdateCollege = () => {
-    navigate('/admin/dashboard/college-update');
-  };
-  const handleUpdateBlog = () => {
-    navigate('/admin/dashboard/blog-update');
-  };
+
+  if (loading) {
+    return (
+      <div className="d-flex justify-content-center mt-5">
+        <Spinner animation="border" role="status">
+          <span className="visually-hidden">Loading...</span>
+        </Spinner>
+      </div>
+    );
+  }
+
+  if (error) {
+    return <MessageBox variant="danger">{error}</MessageBox>;
+  }
+
+  const paidBookings = bookings.filter((booking) => booking.isPaid);
+  const totalRevenue = paidBookings.reduce((sum, booking) => sum + booking.charge, 0);
+
+  const counsellorBookings = bookings.filter((booking) => booking.counsellor === counsellorId);
+  const totalAppointments = counsellorBookings.length;
+  const totalRevenueCounsellor = counsellorBookings.reduce((sum, booking) => sum + booking.charge, 0);
+
   return (
     <div style={{padding: '5rem'}}>
       <Helmet>
         <title>Dashboard</title>
       </Helmet>
       <h1>Dashboard</h1>
-      {loading ? (
-        <div className="d-flex justify-content-center mt-5">
-        <Spinner animation="border" role="status">
-          <span className="visually-hidden">Loading...</span>
-        </Spinner>
-      </div>
-      ) : error ? (
-        <MessageBox variant="danger">{error}</MessageBox>
-      ) : (
-        <>
-          <Row>
+      <Row>
             <Col md={6}>
               <Card style={{padding: '2rem'}}>
                 <Card.Title>
@@ -161,10 +192,57 @@ const DashboardScreen = () => {
             </Col>
             
           </Row>
-          
-        </>
-      )}
+
+          {
+            userInfo.isAdmin ? 
+            <Row>
+        <Col md={6}>
+          <Card style={{padding: '2rem'}}>
+            <Card.Title>
+              {bookings.length}
+            </Card.Title>
+            <Card.Text>Total Bookings</Card.Text>
+          </Card>
+        </Col>
+        <Col md={6}>
+          <Card style={{padding: '2rem'}}>
+            <Card.Title>
+              Rs {totalRevenue}
+            </Card.Title>
+            <Card.Text>Total Revenue</Card.Text>
+          </Card>
+        </Col>
+      </Row>
+      :
+      userInfo.isCounsellor ?
+      <Row>
+      <Col md={6}>
+        <Card style={{padding: '2rem'}}>
+          <Card.Title>
+            {totalAppointments}
+          </Card.Title>
+          <Card.Text>Your Appointments</Card.Text>
+        </Card>
+      </Col>
+      <Col md={6}>
+        <Card style={{padding: '2rem'}}>
+          <Card.Title>
+            Rs {totalRevenueCounsellor}
+          </Card.Title>
+          <Card.Text>Your Revenue</Card.Text>
+        </Card>
+      </Col>
+    </Row>
+    :
+    null
+          }
       
+     
+      {
+        userInfo.isAdmin ?
+        <SalesScreenAdmin/> : userInfo.isCounsellor ?
+        <SalesScreenCounsellor/> : null
+      }
     </div>
   );
 };

@@ -53,6 +53,7 @@ userRouter.post("/signin",
           email: user.email,
           image: user.image,
           isAdmin: user.isAdmin,
+          isCounsellor: user.isCounsellor,
           jwtToken: generateToken(user),
         });
         return;
@@ -71,6 +72,9 @@ userRouter.post("/signup",
       email: req.body.email,
       password: bcrypt.hashSync(req.body.password),
       image: req.body.image,
+      pdf: req.body.pdf,
+      appliedRole: req.body.appliedRole,
+      role: 'student',
     });
     const user = await newUser.save();
     // console.log(user);
@@ -79,6 +83,10 @@ userRouter.post("/signup",
       name: user.name,
       email: user.email,
       image: user.image,
+      pdf: user.pdf,
+      role: user.role,
+      appliedRole: user.appliedRole,
+      isCounsellor: user.isCounsellor,
       isAdmin: user.isAdmin,
       jwtToken: generateToken(user),
     });
@@ -166,7 +174,7 @@ userRouter.post("/forgot-password",
 userRouter.post("/reset-password",
   expressAsyncHandler(async (req, res) => {
     const { userId, token, password } = req.body;
-    console.log(req.body);
+    // console.log(req.body);
 
     try {
       // Validate the token
@@ -228,6 +236,44 @@ userRouter.put("/admin/:userId", isAuth, isAdmin,
     }
   })
 );
+
+
+userRouter.put("/admin/role/:userId", isAuth, isAdmin, 
+  
+  expressAsyncHandler(async (req, res) => {
+    const userId = req.params.userId;
+    const { role: newRole } = req.body;
+
+    const user = await User.findById(userId);
+
+
+    if (user) {
+      // Update the isAdmin field of the user
+      user.role = newRole;
+      if(newRole==='admin'){
+        user.isAdmin = true;
+        user.isCounsellor = false;
+      }
+      if(newRole==='counsellor'){
+        user.isAdmin = false;
+        user.isCounsellor = true;
+      }
+      if(newRole==='student'){
+        user.isAdmin = false;
+        user.isCounsellor = false;
+      }
+
+      // Save the updated user object
+      const updatedUser = await user.save();
+
+      res.status(200).send({ message: "User role status updated", user: updatedUser });
+    } else {
+      res.status(404).send({ message: "User not found" });
+    }
+  })
+);
+
+
 
 
 userRouter.delete("/admin/verify/:userId",

@@ -1,4 +1,4 @@
-import React from 'react'
+import React, { useEffect } from 'react'
 import { BrowserRouter, Link, Route, Routes } from "react-router-dom";
 import NavbarComp from './components/Navbar';
 import Container from "react-bootstrap/Container";
@@ -39,6 +39,14 @@ import ReviewUpload from './screens/ReviewUpload';
 import ReviewListScreen from './screens/ReviewListScreen';
 import UserListScreen from './screens/UserListScreen';
 import ArticleListScreen from './screens/ArticleListScreen';
+import PdfUpload from './components/test/PdfUpload';
+import CounsellorRoute from './components/CounsellorRoute';
+import CounsellorsPage from './screens/CounsellorsPage';
+import BookingDetailsScreen from './screens/BookingDetailsScreen';
+import AppointmentsHistoryScreen from './screens/AppointmentsHistoryScreen';
+import AppointmentsListScreen from './screens/AppointmentsListScreen';
+import AppointmentsListScreenCounsellor from './screens/AppointmentsListScreenCounsellor';
+import { Card } from 'react-bootstrap';
 
 
 
@@ -46,6 +54,8 @@ import ArticleListScreen from './screens/ArticleListScreen';
 
 
 const App = () => {
+  
+  
   return (
     <BrowserRouter>
       <>
@@ -63,7 +73,8 @@ const App = () => {
             <Route path='/contact' element={<Contact/>}/>
             <Route path='/services' element={<ServiceScreen/>}/>
             <Route path='/admission' element={<AdmissionScreen/>}/>
-            <Route path='/counselling' element={<CounsellingScreen/>}/>
+            <Route path='/counselling/free' element={<CounsellingScreen/>}/>
+            <Route path='/counselling/paid' element={<CounsellorsPage/>}/>
             <Route path='college/:slug' element={<CollegeScreen/>}/>
             <Route path='comingsoon' element={<ComingSoon/>}/>
             <Route path='founder' element={<ComingSoon/>}/>
@@ -72,6 +83,7 @@ const App = () => {
             <Route path='futureplans' element={<ComingSoon/>}/>
             <Route path='services' element={<ComingSoon/>}/>
             <Route path="/search" element={<SearchScreen />} />
+            <Route path="/bookings/:id" element={<BookingDetailsScreen />} />
             <Route path="/test" element={<ComingSoon/>} />
 
             {/* protected routes starts here */}
@@ -81,6 +93,15 @@ const App = () => {
                   <ProtectedRoute>
                     {" "}
                     <ProfileScreen />{" "}
+                  </ProtectedRoute>
+                }
+              />
+            <Route
+                path="/appointments"
+                element={
+                  <ProtectedRoute>
+                    {" "}
+                    <AppointmentsHistoryScreen />{" "}
                   </ProtectedRoute>
                 }
               />
@@ -105,6 +126,15 @@ const App = () => {
                   </AdminRoute>
                 }
               />
+            <Route
+                path="/counsellor/dashboard"
+                element={
+                  <CounsellorRoute>
+                    {" "}
+                    <DashboardScreen />{" "}
+                  </CounsellorRoute>
+                }
+              />
               <Route
                 path="/admin/college-edit/:id"
                 element={
@@ -114,6 +144,15 @@ const App = () => {
                   </AdminRoute>
                 }
               />
+              <Route
+                path="/Counsellor/college-edit/:id"
+                element={
+                    <CounsellorRoute>
+                    {" "}
+                    <CollegeEdit />{" "}
+                    </CounsellorRoute>
+                }
+              />
             <Route
                 path="/admin/college-upload"
                 element={
@@ -121,6 +160,15 @@ const App = () => {
                     {" "}
                     <CollegeUpload />{" "}
                   </AdminRoute>
+                }
+              />
+            <Route
+                path="/counsellor/college-upload"
+                element={
+                  <CounsellorRoute>
+                    {" "}
+                    <CollegeUpload />{" "}
+                  </CounsellorRoute>
                 }
               />
             <Route
@@ -139,6 +187,15 @@ const App = () => {
                     {" "}
                     <CollegeListScreen />{" "}
                   </AdminRoute>
+                }
+              />
+            <Route
+                path="/counsellor/collegelist"
+                element={
+                  <CounsellorRoute>
+                    {" "}
+                    <CollegeListScreen />{" "}
+                  </CounsellorRoute>
                 }
               />
             <Route
@@ -166,6 +223,24 @@ const App = () => {
                     {" "}
                     <UserListScreen />{" "}
                   </AdminRoute>
+                }
+              />
+              <Route
+                path="/admin/appointmentslist"
+                element={
+                  <AdminRoute>
+                    
+                    <AppointmentsListScreen/>
+                  </AdminRoute>
+                }
+              />
+              <Route
+                path="/counsellor/appointmentslist"
+                element={
+                  <CounsellorRoute>
+                    
+                    <AppointmentsListScreenCounsellor/>
+                  </CounsellorRoute>
                 }
               />
             

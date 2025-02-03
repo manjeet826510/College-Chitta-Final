@@ -11,12 +11,12 @@ commentRouter.get("/:id",
   expressAsyncHandler(async (req, res) => {
     // Access the name parameter from the request URL
     const id = req.params.id;
-    console.log(id);
+    // console.log(id);
 
     try {
       // Find the article by name
       const filteredComments = await Comment.find({ articleId: id }).sort({ createdAt: -1 }).populate("author", "name");
-      console.log(filteredComments);
+      // console.log(filteredComments);
 
       if (filteredComments.length > 0) {
         // console.log(filteredComments);
